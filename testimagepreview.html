@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Image preview</title>
+	<link rel="stylesheet" href="">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+
+			$('#imgName').bind('input', function() {
+			    $('#imageHolder').attr('src', $(this).val()); //concatinate path if required
+			});
+
+		});
+	</script>
+</head>
+<body>
+	<input type="text" name="" id="imgName" value="" placeholder="Input image name"><br><br>
+	<img name="imageHolder" id="imageHolder" src="http://i.imgur.com/zAyt4lX.jpg">
+</body>
+</html>

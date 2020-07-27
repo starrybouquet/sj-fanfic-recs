@@ -1,0 +1,14 @@
+The key fingerprint is:
+SHA256:A09IvJ7c2sOvtRlrC8MmH0zdTSqYvlC7Jc/EimM6ksw my@priv
+The key's randomart image is:
++---[RSA 3072]----+
+|     ..          |
+|     ...         |
+|      o..     .  |
+|      .+ + . +   |
+|     o oS o o .  |
+|      +*.+ .     |
+| o .  o+@ *      |
+|  E . +*+#.=     |
+|   ..+..*=O.     |
++----[SHA256]-----+
