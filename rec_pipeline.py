@@ -12,6 +12,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 ao3 = AO3()
 
+sites = {'ao3': 'archiveofourown.org',
+            'ffn': 'fanfiction.net'}
 
 class Link(object):
     '''link from html rec list'''
@@ -82,6 +84,9 @@ class Work(Link):
     def get_title(self):
         return self.title
 
+    def get_author(self):
+        return self.author
+
     def get_desc(self):
         return self.desc
 
@@ -115,9 +120,19 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', s
 client = gspread.authorize(creds)
 
 # Find workbook and open sheets
-recs = client.open("SJ Masterlist Imported").get_worksheet(1)
-legend = client.open("SJ Masterlist Imported").get_worksheet(2)
-data_out = client.open("SJ Masterlist Imported").get_worksheet(0)
+recs = client.open("SJ Masterlist Data").get_worksheet(1)
+legend = client.open("SJ Masterlist Data").get_worksheet(2)
+data_out = client.open("SJ Masterlist Data").get_worksheet(0)
+
+recs_local = recs.get_all_values()
+legend_local = legend.get_all_values()
+
+first_blank_line = recs.col_values(1).index('')+1
+
+def update_local_copies():
+    global recs_local = recs.get_all_values()
+    global legend_local = legend.get_all_values()
+    first_blank_line = recs.col_values(1).index('')+1
 
 # # Extract and print all of the values
 # all_recs = recs.get_all_values()
@@ -157,8 +172,6 @@ def get_works(post_url, reccer):
 
     post = client.posts(post_username, id=post_id)['posts'][0]
     content = post['trail'][0]['content'].split('<')
-    sites = {'ao3': 'archiveofourown.org',
-                'ffn': 'fanfiction.net'}
 
     authors = []
     works = []
@@ -179,14 +192,26 @@ def add_work(work):
     '''from Work class, check the gsheet and add to recs if it's not there.
     If it's already there, add reccer if they're not already there'''
     # use link to figure out if it's already there
+    link_matches = recs.findall(work.get_url()) #probably need to check that links are consistent
+
+    if len(link_matches) > 0: # fic is already there
+        workrow = link_matches[0].row
+        reccers = recs_local[workrow-1][9]
+        if work.get_reccer() not in reccers:
+            newvalue = reccers + ", " + work.get_reccer()
+            recs.update_cell(workrow, 10, newvalue)
+
+    elif len(link_matches) == 0: # need to add fic
+        workrow = first_blank_line
+        recs.update('A{0}:J{0}'.format(workrow), [work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()])
+        first_blank_line += 1
 
 
 def add_filters(rownum):
     '''add filters based on categories/eps/seasons entered in doc (manually)'''
     pass
 
-def add_desc(rownum):
-    pass
+
 
 
 ## possible additions:
