@@ -46,6 +46,7 @@ class Work(Link):
     def __init__(self, raw_link, reccer, ao3=None):
         super().__init__(raw_link)
         self.reccer = reccer
+        self.url = raw_link
         if self.site == 'ao3':
             self.id = self.link.partition('/works/')[2]
             try:
@@ -87,6 +88,9 @@ class Work(Link):
     def get_reccer(self):
         return self.reccer
 
+    def get_url(self):
+        return self.url
+
     def strip_html(self, summary):
         soup = BeautifulSoup(summary, 'html.parser')
         return soup.get_text()
@@ -110,15 +114,14 @@ scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/aut
 creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 client = gspread.authorize(creds)
 
-# Find a workbook by name and open the first sheet
-# Make sure you use the right name here.
+# Find workbook and open sheets
 recs = client.open("SJ Masterlist Imported").get_worksheet(1)
 legend = client.open("SJ Masterlist Imported").get_worksheet(2)
 data_out = client.open("SJ Masterlist Imported").get_worksheet(0)
 
-# Extract and print all of the values
-list_of_values = sheet.get_all_values()
-print(list_of_values)
+# # Extract and print all of the values
+# all_recs = recs.get_all_values()
+# print(list_of_values)
 
 # From tumblr API console https://api.tumblr.com/console
 # Authenticate via OAuth
@@ -172,9 +175,11 @@ def get_works(post_url, reccer):
 
     return works
 
-def add_works(works):
-    '''from list of works of Work class, check the gsheet and add to recs if it's not there.
-    If it's already there, add reccer if it's not already there'''
+def add_work(work):
+    '''from Work class, check the gsheet and add to recs if it's not there.
+    If it's already there, add reccer if they're not already there'''
+    # use link to figure out if it's already there
+
 
 def add_filters(rownum):
     '''add filters based on categories/eps/seasons entered in doc (manually)'''
