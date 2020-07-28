@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+<!--PAGE THEME #11: SUCCULENT by @nonspace.
+  Find more of my work at https://nonspace.tumblr.com
+
+    Don't steal.
+    Don't claim as your own.
+    Don't use as base code.
+    Editing for personal use is fine!
+
+    Need help? Have a look at this themes FAQ:
+    https://nonspace.tumblr.com/tagged/theme-help:+succulent
+    Or my general FAQ: https://nonspace.tumblr.com/help/support
+
+    Please report any bugs to me.
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/png" href="{Favicon}">
+  <title>Sam/Jack Fic Masterlist</title>
+
+  <!--jQuery-->
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+
+  <!--ISOTOPE PLUGIN https://isotope.metafizzy.co/ (for filtering)-->
+  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+
+  <!--Icon Fonts-->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
+
+  <!--Google Fonts-->
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+
+<!--SETTINGS-->
+<!--The template spreadsheet is here:
+https://docs.google.com/spreadsheets/d/124yZTS885Mx4BYFN4PPxjP450LrRrTMmTubI0MoI4WE/edit?usp=sharing
+Instructions are in the "INSTRUCTIONS" tab.
+-->
+
+<!--If you use it without the spreadsheet delete or uncomment this script-->
+<script>
+ // ID of your Google Spreadsheet
+ var spreadsheetID = "1_9-jjGIO4v1NgppU3ENDEE1itPbnDStyYzbx1J5_OfQ";
+</script>
+
+<style>
+:root {
+  --fontSize: 16px;
+  --cardWidth: 540px; /*entire card*/
+  --imgHeight: 250px;
+
+  --accent: #4285b0;
+  --background: #eee;
+  --sidebarBackground: #111;
+  --sidebarText: #fff;
+  --cardBackground: #fff;
+  --cardText: #111;
+  --cardHover: #bddcf2;
+}
+
+
+/*STYLES*/
+
+/*GENERAL*/
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-size: var(--fontSize);
+  font-family: 'Raleway';
+}
+
+#wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+
+/*SIDEBAR*/
+
+aside {
+  position: fixed;
+  width: 300px;
+  background: var(--sidebarBackground);
+  color: var(--sidebarText);
+  height: 100%;
+  z-index: 1;
+  font-family: 'Raleway';
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+aside h1,
+nav {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+aside h1 {
+  font-size: 1.5rem;
+}
+
+aside h1 {
+  display: block;
+  position: relative;
+}
+
+.sep {
+  height: 5px;
+  width: 50px;
+  background: var(--accent);
+  margin: 5px 0 13px;
+}
+
+nav {
+  padding: 25px 0 50px;
+}
+
+nav a {
+  position: relative;
+  text-decoration: none;
+  color: var(--sidebarText);
+}
+
+nav ul li {
+  list-style-type: none;
+  margin: 25px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dropdown-content {
+    display: none;
+    padding-left: 10%;
+}
+
+/* IN PROGRESS */
+/* .right-menu-btn a:hover .subcategory {
+    display: block;
+    position: relative;
+    left: 100%;
+} */
+
+.subcategory {
+    display: none;
+}
+
+.active {
+    background-color: rgb(255, 255, 255, 0.2);
+}
+
+#abt {
+  line-height: 160%;
+}
+
+#social {
+  list-style-type: none;
+  margin-top: auto;
+  align-self: bottom;
+}
+
+#social a {
+  color: var(--sidebarText);
+}
+
+#social li {
+  display: inline-block;
+  margin: 0 15px 0 0;
+}
+
+#title a {
+    text-decoration: none;
+    color: #fff;
+}
+
+
+/*GRID*/
+
+main {
+  position: relative;
+  width: calc(100% - 300px);
+  min-height: 100vh;
+  height: auto;
+  margin-left: 300px;
+  background: var(--background);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 35px 35px;
+  border-left: 20px solid var(--accent);
+}
+
+#grid {
+  margin: 0 auto;
+  width: calc(var(--cardWidth) + 30px);
+}
+
+
+/*CARDS*/
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: var(--cardWidth);
+  overflow: hidden;
+  margin: 15px;
+  color: var(--cardText);
+}
+
+.card > a {
+  line-height: 0;
+  position: relative;
+  color: #000;
+  text-decoration: none;
+}
+
+.card img {
+  width: var(--cardWidth);
+  height: var(--imgHeight);
+  object-fit: cover;
+  line-height: 0;
+}
+
+
+
+.box {
+  position: relative;
+  background: var(--cardBackground);
+  height: auto;
+  padding: 15px 20px 0;
+  line-height: 160%;
+  overflow: hidden;
+  border-bottom: 15px solid var(--cardBackground);
+}
+
+/*.box:hover {*/
+/*    background: var(--cardHover);*/
+/*    transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);*/
+/*}*/
+
+.card {
+ -webkit-box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.1);
+}
+
+aside {
+ -webkit-box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.3);
+  box-shadow: 0px 0px 15px -0px rgba(0,0,0,0.5);
+}
+
+.box h2 {
+  font-size: 1.1rem;
+  font-family: 'Raleway';
+  text-transform: uppercase;
+}
+
+.box .desc {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.box .desc p:not(first-of-type) {
+  margin-top: 15px;
+}
+
+.box a, #abt a {
+  color: var(--boxText);
+  text-decoration: none;
+  box-shadow: inset 0 -5px var(--accent);
+}
+
+
+/*OVERLAY*/
+
+/*.overlay {*/
+/*  background: rgba(0,0,0,0.3);*/
+/*  position: absolute;*/
+/*  height: 100%;*/
+/*  width: 100%;*/
+/*  left: 0;*/
+/*  top: 0;*/
+/*  bottom: 0;*/
+/*  right: 0;*/
+/*  opacity: 0;*/
+/*  -webkit-transition: all 0.4s ease-in-out 0s;*/
+/*  -moz-transition: all 0.4s ease-in-out 0s;*/
+/*  transition: all 0.4s ease-in-out 0s;*/
+/*}*/
+
+/*.overlay-text {*/
+/*  position: absolute;*/
+/*  text-align: center;*/
+/*  padding-left: 1em;*/
+/*  padding-right: 1em;*/
+/*  width: 100%;*/
+/*  top: 80%;*/
+/*  left: 50%;*/
+/*  opacity: 0;*/
+/*  -webkit-transform: translate(-50%, -50%);*/
+/*  -moz-transform: translate(-50%, -50%);*/
+/*  transform: translate(-50%, -50%);*/
+/*  -webkit-transition: all 0.3s ease-in-out 0s;*/
+/*  -moz-transition: all 0.3s ease-in-out 0s;*/
+/*  transition: all 0.3s ease-in-out 0s;*/
+/*  font-size: 500%;*/
+/*}*/
+
+.card > a:hover .overlay {
+  opacity: 1;
+}
+.card > a:hover .overlay-text {
+  opacity: 1;
+  top: 50%;
+  left: 50%;
+}
+
+
+/*ANIMATION KEYFRAMES*/
+
+@-webkit-keyframes fadeIn  {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  80% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  80% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+
+main {
+  -webkit-animation-duration: 0.8s;
+  animation-name: fadeIn;
+  animation-duration: 0.8s;
+}
+
+
+/*HOVER*/
+
+a {
+  transition: all 0.2s ease-in-out;
+}
+
+nav a:before {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 3px;
+  top: 80%;
+  margin-top: -0.5px;
+  background: var(--accent);
+}
+
+nav a:before {
+  left: -2.5px;
+}
+
+nav a:hover:before {
+  background: var(--accent);
+  width: 100%;
+  height: 20%;
+  transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+#social a:hover {
+  color: var(--accent);
+}
+
+
+/*MEDIA QUIERIES*/
+
+@media only screen and (max-width: 720px) {
+  body > iframe:first-of-type {
+    top: 80px;
+  }
+
+  aside {
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 50px
+  }
+
+  #abt, nav {
+    display: none;
+  }
+
+  #social {
+    margin: inherit;
+    padding-top: 6px;
+  }
+
+  main {
+    width: 100%;
+    margin-left: 0;
+    border-left: none;
+    padding: 100px 0px;
+  }
+
+  #grid {
+    width: var(--gridWidth);
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  aside h1 {
+    font-size: 1.0rem;
+    padding-top: 10px;
+  }
+
+  aside .sep {
+    display: none;
+  }
+
+  #social svg {
+    height: 15px;
+    margin-top: 5px;
+  }
+
+  #social li {
+    margin: 0 3px;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div id='wrapper'>
+  <aside>
+
+    <!--TITLE-->
+    <div id='title'>
+      <a href="/"><h1>Sam/Jack Fic Masterlist</h1></a>
+      <div class="sep"></div>
+    </div>
+
+    <!--FILTER NAVIGATION-->
+    <!--This is where you set your filter navigation.
+      The filter attributes are added in the spreadsheet and they need to match the ones
+      in this navigation.
+
+      You can add several groups to a link: group AND group, group OR group etc. You can
+      read more here: https://isotope.metafizzy.co/filtering.html
+      Adding multiple filters: https://nonspace.tumblr.com/post/166045257594/hi-im-using-your-page-theme-after-image-and-i
+    -->
+
+    <nav>
+      <ul>
+        <li>
+          <a href="#" data-filter="*">All</a>
+        </li>
+        <div class="dropdown">
+        <li><a href="#seasons" class="dropdown-btn">By Season</a>
+            <div class="dropdown-content" id="seasons">
+              <ul>
+                <li>
+                  <a href="#s1" data-filter=".f1">Season 1</a>
+                  <div class="subcategory" id="s1">
+                  </div>
+                </li>
+                <li>
+                  <a href="#s2" data-filter=".f2" class="right-menu-btn">Season 2</a>
+                  <div class="subcategory" id="s2">
+                    <ul>
+                      <li><a href="#" data-filter=".f22">The Gamekeeper</a></li>
+                      <li><a href="#" data-filter=".f13">Need</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <a href="#s3" data-filter=".f3" class="right-menu-btn">Season 3</a>
+                  <div class="subcategory" id="s3">
+                    <ul>
+                      <li><a href="#" data-filter=".f17">pre-Nemesis</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <a href="#s4" data-filter=".f4" class="right-menu-btn">Season 4</a>
+                  <div class="subcategory" id="s4">
+                    <ul>
+                      <li><a href="#" data-filter=".f21">Nemesis/Small Victories</a></li>
+                      <li><a href="#" data-filter=".f14">Window of Opportunity</a></li>
+                      <li><a href="#" data-filter=".f24">Beneath the Surface</a></li>
+                      <li><a href="#" data-filter=".f10">2010</a></li>
+                      <li><a href="#" data-filter=".f23">The Light</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <a href="#s5" data-filter=".f5">Season 5</a>
+                  <div class="subcategory" id="s5">
+                  </div>
+                </li>
+                <li>
+                  <a href="#s6" data-filter=".f6" class="right-menu-btn">Season 6</a>
+                  <div class="subcategory" id="s6">
+                    <ul>
+                      <li><a href="#" data-filter=".f20">Descent</a></li>
+                      <li><a href="#" data-filter=".f16">Redemption</a></li>
+                      <li><a href="#" data-filter=".f15">Allegiance</a></li>
+                      <li><a href="#" data-filter=".f12">Paradise Lost</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <a href="#s7" data-filter=".f7" class="right-menu-btn">Season 7</a>
+                  <div class="subcategory" id="s7">
+                    <ul>
+                      <li><a href="#" data-filter=".f19">Grace</a></li>
+                      <li><a href="#" data-filter=".f18">Death Knell</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <a href="#s8" data-filter=".f8" class="right-menu-btn">Season 8</a>
+                  <div class="subcategory" id="s8">
+                    <ul>
+                      <li><a href="#" data-filter=".f25">Lockdown</a></li>
+                      <li><a href="#" data-filter=".f11">Affinity</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <a href="#post-s8" data-filter=".f9">Post-Season 8</a>
+                  <div class="subcategory" id="post-s8">
+                  </div>
+                </li>
+              </ul>
+            </div>
+        </li>
+        </div>
+        <div class="dropdown">
+        <li><a href="#categories" class="dropdown-btn">By Category</a>
+          <div class="dropdown-content" id="categories">
+            <ul>
+              <li>
+                <a href="#" data-filter="*">All</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f37">Offworld Action/Adventure</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f38">Canon-Compliant</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f39">Birthday</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f40">Fake Dating/Wedding Date</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f41">Alternate Universe</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f43">Established Relationship</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f44">Cabin Fic</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f45">Christmas</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f46">Valentines</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f47">Aliens Made Them Do It</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f48">Kidfic</a>
+              </li>
+              <li>
+              <a href="#" data-filter=".f49">Soulmate AU</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li><br></li>
+        <li><a href="/ABOUTPAGE">What Is This?</a></li>
+      </ul>
+    </nav>
+
+    <!--DESCRIPTION-->
+    <div id="abt">
+      Find Sam/Jack fics by category and season.
+    </div>
+
+    <!--LINKS-->
+    <ul id="social">
+    <!--To add more copy & paste a line. You can find more icons here: https://feathericons.com/-->
+      <li><a href="/"><i data-feather="home"></i></a></li>
+      <li><a href="/ask"><i data-feather="mail"></i></a></li>
+      <li><a href="/ABOUTPAGE"><i data-feather="user"></i></a></li>
+      <li><a href="/updates"><i data-feather="info"></i></a></li>
+    </ul>
+  </aside>
+  <main>
+  <div id="grid">
+  <!--TEMPLATE
+    You can use the template below if you want to manually add cards.
+    If you use this theme without a spreadsheet and have issues with the grid not working replace the script at the bottom
+    of the page with the one here:
+    https://github.com/nnspce/succulent/blob/master/scripts%20without%20spread
+  -->
+
+  <div class="post-card">
+    <div class="box">
+      <h2 align="center">Questions, comments, concerns?</h2>
+      <div class="bposts">
+        <div class="posts" id="">
+          <div class="txt" id=""><div class="c"><iframe scrolling="no" src="https://www.tumblr.com/ask_form/sjficlist.tumblr.com" style="background-color: transparent; overflow: hidden; height: 256px;" id="ask_form" width="100%" height="190" frameborder="0"></iframe></div></div></div><!-- end posts --></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+
+
+<!--SCRIPTS-->
+ <!--TEMPLATE
+      If you use this theme without a spreadsheet and have issues with the grid not working replace this script with the one here:
+      https://github.com/nnspce/succulent/blob/master/scripts%20without%20spread
+-->
+<script>
+//feather icons
+feather.replace();
+
+/* from https://www.w3schools.com/howto/howto_js_dropdown_sidenav.asp */
+//* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}
+
+content.html().done(function(html) {
+    buildLayout(html);
+});
+
+function buildLayout(content, grid) {
+
+    $('#grid').hide();
+    $('#grid').append(content);
+
+    $('#grid').fadeIn();
+
+    //resizeGrid on load
+    resizeGrid();
+
+    //initialise isotope
+    const $grid = $('#grid').isotope({
+        itemSelector: '.card',
+    });
+
+    $('nav a').on('click', function() {
+        var filterValue = $(this).attr('data-filter');
+        $grid.isotope({
+            filter: filterValue
+        });
+        e.preventDefault();
+    });
+}
+
+function resizeGrid() {
+    const winWidth = $('main').innerWidth() - 70;
+    const cardWidth = $('.card').outerWidth() + 30;
+    const colNum = Math.floor(winWidth / cardWidth);
+
+    if (colNum > 1) {
+        $('#grid').css({
+            'width': cardWidth * colNum
+        });
+        $('.card').css({
+            'margin': '15px'
+        });
+    } else {
+        $('#grid').css({
+            'width': cardWidth - 30
+        });
+        $('.card').css({
+            'margin': '15px 0'
+        });
+    }
+}
+
+//resizeGrid on window resize
+(function() { // closure to avoid global variable
+    var timeoutResize;
+    $(window).on('resize', function() {
+        clearTimeout(timeoutResize);
+        timeoutResize = setTimeout(function() {
+            resizeGrid();
+        }, 100);
+    });
+})();
+
+$('body').append(
+  '<div id="nnspc" style="position: fixed; bottom: 0; right: 0; padding: 10px; background: #181818; z-index: 9;"><a style="font-family: helvetica; font-weight: bold; letter-spacing: -1px; color: #fff; text-decoration: none;" href="https://nonspace.tumblr.com">nonspace.</a></div>'
+);
+
+</script>
+
+</html>
