@@ -3,7 +3,7 @@
 # Also trying to extract a header image given a blog name.
 
 import pytumblr
-from ao3 import AO3
+import AO3
 from ao3.works import RestrictedWork
 import ffnet
 
@@ -12,8 +12,6 @@ import requests
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-
-ao3 = AO3()
 
 sites = {'ao3': 'archiveofourown.org',
             'ffn': 'fanfiction.net'}
@@ -45,41 +43,50 @@ class Link(object):
     def get_link(self):
         return self.link
 
-class Work(Link):
+class Fic(Link):
     '''works from ao3 or ffn'''
 
-    def __init__(self, raw_link, reccer, ao3=None):
+    def __init__(self, raw_link, reccer, existingAO3Work=False):
         super().__init__(raw_link)
         self.reccer = reccer
         self.url = raw_link
-        if self.site == 'ao3':
-            self.id = self.link.partition('/works/')[2]
-            try:
-                me = ao3.work(id=self.id)
-            except RestrictedWork:
-                self.title = 'restricted; please enter manually'
-                self.desc = 'restricted; please enter manually'
-                self.author = 'restricted; please enter manually'
-                self.rating = 'restricted; please enter manually'
-            self.title = me.title
-            self.desc = self.strip_html(me.summary)
-            self.author = me.author # may want to connect to author class
-            if (me.rating[0]=='Mature') or (me.rating[0]=='Explicit'):
+        if existingAO3Work:
+            self.title = existingAO3Work.title()
+            self.desc = existingAO3Work.summary()
+            self.author = existingAO3Work.authors()[0] # may want to connect to author class
+            if (existingAO3Work.rating()=='Mature') or (existingAO3Work.rating()=='Explicit'):
                 self.isAdult = True
             else:
                 self.isAdult = False
+        else:
+            if self.site == 'ao3':
+                self.id = self.link.partition('/works/')[2]
+                try:
+                    me = AO3.work(id=self.id)
+                except RestrictedWork:
+                    self.title = 'restricted; please enter manually'
+                    self.desc = 'restricted; please enter manually'
+                    self.author = 'restricted; please enter manually'
+                    self.rating = 'restricted; please enter manually'
+                self.title = me.title()
+                self.desc = self.strip_html(me.summary())
+                self.author = me.author()[0] # may want to connect to author class
+                if (me.rating()=='Mature') or (me.rating()=='Explicit'):
+                    self.isAdult = True
+                else:
+                    self.isAdult = False
 
-        elif self.site == 'ffn':
-            self.id = self.link.partition('/s/')[2].partition('/')[0]
-            me = ffnet.Story(id=self.id)
-            me.download_data()
-            self.title = me.title
-            self.desc = me.description
-            self.author = me.author_id
-            if me.rated == 'M':
-                self.isAdult = True
-            else:
-                self.isAdult = False
+            elif self.site == 'ffn':
+                self.id = self.link.partition('/s/')[2].partition('/')[0]
+                me = ffnet.Story(id=self.id)
+                me.download_data()
+                self.title = me.title
+                self.desc = me.description
+                self.author = me.author_id
+                if me.rated == 'M':
+                    self.isAdult = True
+                else:
+                    self.isAdult = False
 
     def __str__(self):
         return "Work '{}'' at {}".format(self.title, self.link)
@@ -216,9 +223,8 @@ def get_works(post_url, reccer, tumblrPost=True):
         all_links = []
         for link in links_raw:
             r = requests.get(link)
-            if r.is_redirect:
-                all_links.append(r.url)
-                print("{0} was a redirect link, appended the following instead: {1}".format(link, r.url))
+            print("Link is currently {}".format(r.url))
+            print("Trying redirect link:")
 
     authors = []
     works = []
@@ -226,12 +232,28 @@ def get_works(post_url, reccer, tumblrPost=True):
         if ('/u/' in link) or ('/users/' in link):
             authors.append(Author(link))
         elif ('/s/' in link) or ('/works/' in link):
-            works.append(Work(link, reccer))
+            works.append(Fic(link, reccer))
         else:
             print('{} is an invalid link'.format(link))
 
 
     return works
+
+def get_works_from_bookmarks(mine=True):
+    '''
+    Returns list of Works, one per bookmark
+    '''
+    if mine:
+        pw = str(input("Please input password: "))
+        session = AO3.Session("starrybouquet", pw)
+        bookmarks = session.get_bookmarks()
+
+    bookmarked_works = []
+    for work in bookmarks:
+        print(type(work))
+        if work.fandom() == "Stargate SG-1":
+            bookmarked_works.append(Fic(work.url(), 'starrybouquet', existingAO3Work=work))
+    return bookmarked_works
 
 def add_work(work):
     '''from Work class, check the gsheet and add to recs if it's not there.
@@ -289,13 +311,17 @@ def update_filter_legend():
     update_local_copies()
 
 
-works = get_works('https://samcaarter.tumblr.com/private/621914267347795968/tumblr_qchqnjlukx1r9gqxq', 'samcaarter', tumblrPost=False)
-print("We found {} works".format(len(works)))
-for work in works:
-    print(work.get_title())
-    add_work()
-    print('work added')
-    print()
+# works = get_works('https://samcaarter.tumblr.com/private/621914267347795968/tumblr_qchqnjlukx1r9gqxq', 'samcaarter', tumblrPost=False)
+# print("We found {} works".format(len(works)))
+# for work in works:
+#     print(work.get_title())
+#     add_work()
+#     print('work added')
+#     print()
+
+w = get_works_from_bookmarks()
+for title in w:
+    print(w.get_title())
 
 
 ## possible additions:
