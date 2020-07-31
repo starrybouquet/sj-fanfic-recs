@@ -147,44 +147,45 @@ def single_work_from_link(link, reccer):
 
     Returns
     -------
-    list [int, Work]
+    int, work
         Work Work (or multiple if the link was a series)
         int equal to number of works retrieved
-        List is just [int] if the link was invalid/was an author.
+        If the link was invalid/was an author, returns int, None
     '''
     if ('/u/' in link) or ('/users/' in link):
         print("Author link. Not going to create it because it's a hassle. Uncomment following line to create Authors.")
         # authors.append(Author(link))
-        return [0]
+        return 0, None
     elif ('/s/' in link) or ('/works/' in link):
+        print("Actual fic, creating work...")
         work = Fic(link, reccer)
         numWorksRetrieved = 1
-        return [numWorksRetrieved, work]
+        return numWorksRetrieved, [work]
     elif '/series/' in link:
         print('Link is to a series, trying to access series parts now')
         seriesworks = get_works_from_series(link.partition('/series/')[2], reccer)
         numWorksRetrieved = len(seriesworks)
-        return [numWorksRetrieved, seriesworks]
+        return numWorksRetrieved, seriesworks
     else:
         print('{} is an invalid link'.format(link))
-        return [0]
+        return 0, None
 
 
-def multiple_works_from_links(linkList, reccer, sleeptime=90):
+def multiple_works_from_links(linkList, reccer, sleeptime=130):
     authors = []
     works = []
     worksSinceSleep = 0
     for link in linkList:
-        if worksSinceSleep >= 30:
+        if worksSinceSleep >= 25:
             print('We have been through {0} works since last sleep. Pausing for {1} sec so that we do not exceed requests.'.format(worksSinceSleep, sleeptime))
             time.sleep(sleeptime)
             worksSinceSleep = 0
 
-        linkOutput = single_work_from_link(link, reccer)
+        num_works, new_works = single_work_from_link(link, reccer)
 
-        if len(linkOutput) != 1:
-            works.extend(linkOutput[1:])
-            worksSinceSleep += linkOutput[0]
+        if num_works != 0:
+            works.extend(new_works)
+            worksSinceSleep += num_works
 
     return works
 
@@ -262,7 +263,7 @@ recursion_depth = 3000
 sys.setrecursionlimit(recursion_depth)
 work_links = pickle.load(open('old_data.p', 'rb'))
 works = multiple_works_from_links(work_links, 'samcaarter')
-print("We found {} works. List below:")
+print("We found {} works. List below:".format(len(works)))
 for work in works:
     print(work.get_title())
 print()
