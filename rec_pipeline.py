@@ -3,6 +3,7 @@
 # Also trying to extract a header image given a blog name.
 import time
 import pickle
+import sys
 
 import pytumblr
 import AO3
@@ -18,6 +19,8 @@ from classes import Fic, Author
 
 sites = {'ao3': 'archiveofourown.org',
             'ffn': 'fanfiction.net'}
+
+
 
 # def update_local_copies():
 #     global recs_local = recs.get_all_values()
@@ -36,20 +39,6 @@ def html_from_url(url):
 def split_by_commas(string):
     '''return list of items split by commas and stripped of whitespace'''
     return string.partition(", ")
-
-def update_local_copies():
-    recs_local = recs.get_all_values()
-    legend_local = legend.get_all_values()
-    first_blank_line = recs.col_values(1).index('')+1
-    converted_legend = convert_legend_to_multiple_tags(legend_local)
-    first_blank_legend_line = legend.col_values(1).index('')+1
-
-recs_local = recs.get_all_values()
-legend_local = legend.get_all_values()
-converted_legend = convert_legend_to_multiple_tags(legend_local)
-
-first_blank_line = len(recs.col_values(1))+1
-first_blank_legend_line = len(legend.col_values(1))+1
 
 # # Extract and print all of the values
 # all_recs = recs.get_all_values()
@@ -149,7 +138,7 @@ def get_works(post_url, source='tumblr', filename=''):
 
         return all_links
 
-def single_work_from_link(link):
+def single_work_from_link(link, reccer):
     '''Get single work from link given.
 
     Parameters
@@ -181,17 +170,17 @@ def single_work_from_link(link):
         return [0]
 
 
-def multiple_works_from_links(linkList, reccer):
+def multiple_works_from_links(linkList, reccer, sleeptime=90):
     authors = []
     works = []
     worksSinceSleep = 0
     for link in linkList:
         if worksSinceSleep >= 30:
-            print('We have been through {} works since last sleep. Pausing for 2 min so that we do not exceed requests.'.format(worksSinceSleep))
-            time.sleep(120)
+            print('We have been through {0} works since last sleep. Pausing for {1} sec so that we do not exceed requests.'.format(worksSinceSleep, sleeptime))
+            time.sleep(sleeptime)
             worksSinceSleep = 0
 
-        linkOutput = single_work_from_link(link)
+        linkOutput = single_work_from_link(link, reccer)
 
         if len(linkOutput) != 1:
             works.extend(linkOutput[1:])
@@ -208,42 +197,88 @@ def get_works_from_series(seriesid, reccer):
         seriesparts.append(Fic(work.url, reccer, existingAO3Work=work))
     return seriesparts
 
-def add_work(work, row_to_add):
-    '''from Work class, check the gsheet and add to recs if it's not there.
-    If it's already there, add reccer if they're not already there'''
+def get_recs_spreadsheet():
+    '''Get recs spreadsheets from Google
 
+    Returns
+    -------
+    recs
+        gsheet sheet object
+    recs_local
+        list of lists version of gsheet sheet
+
+    '''
     # use creds to create a client to interact with the Google Drive API
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
     client = gspread.authorize(creds)
 
-    # Find workbook and open sheets
     recs = client.open_by_url('https://docs.google.com/spreadsheets/d/1_9-jjGIO4v1NgppU3ENDEE1itPbnDStyYzbx1J5_OfQ').get_worksheet(1)
-    # use link to figure out if it's already there
-    link_matches = recs.findall(work.get_url()) #probably need to check that links are consistent
 
-    if len(link_matches) > 0: # fic is already there
-        workrow = link_matches[0].row
-        reccers = recs_local[workrow-1][9]
+    recs_local = recs.get_all_values()
+
+    return recs, recs_local
+
+def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
+    '''Add work to fic entry part of spreadsheet. Checks the gsheet and add to recs if it's not there.
+    If it's already there, add reccer if they're not already there
+
+    Parameters
+    ----------
+    work : Work
+        Work to add.
+    row_to_add : int
+        Row number that work should be added to, if it's not yet in sheet.
+    linkList : list
+        List of all links in sheet, currently. You can get this using sheet.col_values(4).
+    recs_sheet : list
+        List of lists representing sheet before any works were added.
+    recs_object : gsheet sheet
+        Sheet object to update.
+
+    Returns
+    -------
+    int
+        1 if work was added, 0 if it was already there.
+
+    '''
+
+    # use link to figure out if it's already there
+    if work.get_url() in linkList: #probably need to check that links are consistent
+        workrow = linkList.index(work.get_url())
+        reccers = recs_sheet[workrow][9]
         if work.get_reccer() not in reccers:
             newvalue = reccers + ", " + work.get_reccer()
-            recs.update_cell(workrow, 10, newvalue)
+            recs_object.update_cell(workrow, 10, newvalue)
+        return 0
 
-    elif len(link_matches) == 0: # need to add fic
-        workrow = first_blank_line
-        recs.update('A{0}:J{0}'.format(workrow), [work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()])
+    else: # need to add fic
+        recs_object.update('A{0}:J{0}'.format(row_to_add), [work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()])
+        return 1
 
 
 # work_links = print(get_works('', source='file', filename='samcaarter_reclist.html'))
+recursion_depth = 3000
+sys.setrecursionlimit(recursion_depth)
 work_links = pickle.load(open('old_data.p', 'rb'))
-works = works_from_links(work_links, 'samcaarter')
-pickle.dump(works, open('works_found.p', 'wb'))
-print("We found {} works. Dumped them in works_found.p for safekeeping.".format(len(works)))
-
+works = multiple_works_from_links(work_links, 'samcaarter')
+print("We found {} works. List below:")
 for work in works:
     print(work.get_title())
-    add_work(work, first_blank_line)
-    first_blank_line += 1
+print()
+print("Trying to put them in pickle now.")
+try:
+    pickle.dump(works, open('works_found.p', 'wb'))
+    print()
+    print("Successfully dumped, now adding to spreadsheet")
+except RecursionError:
+    print("Recursion error occurred with depth {}, skipping pickle dump.".format(sys.getrecursionlimit()))
+recs, recs_local = get_recs_spreadsheet()
+first_blank_line = len(recs.col_values(1))+1
+all_links = recs.col_values(4)
+for work in works:
+    print(work.get_title())
+    first_blank_line += add_work(work, first_blank_line, all_links, recs_local, recs)
     print('work added')
     print()
 
