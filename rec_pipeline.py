@@ -6,7 +6,10 @@ import pytumblr
 from ao3 import AO3
 from ao3.works import RestrictedWork
 import ffnet
+
 from bs4 import BeautifulSoup
+import requests
+
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -120,32 +123,50 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', s
 client = gspread.authorize(creds)
 
 # Find workbook and open sheets
-recs = client.open("SJ Masterlist Data").get_worksheet(1)
-legend = client.open("SJ Masterlist Data").get_worksheet(2)
+recs = client.open_by_url('https://docs.google.com/spreadsheets/d/1_9-jjGIO4v1NgppU3ENDEE1itPbnDStyYzbx1J5_OfQ').get_worksheet(1)
+legend = client.open_by_url('https://docs.google.com/spreadsheets/d/1_9-jjGIO4v1NgppU3ENDEE1itPbnDStyYzbx1J5_OfQ').get_worksheet(2)
+
+# def update_local_copies():
+#     global recs_local = recs.get_all_values()
+#     global legend_local = legend.get_all_values()
+#     global first_blank_line = recs.col_values(1).index('')+1
+#     global converted_legend = convert_legend_to_multiple_tags(legend_local)
+#     global first_blank_legend_line = legend.col_values(1).index('')+1
+
+def html_from_url(url):
+    '''uses requests to get html in str form (for BeautifulSoup) given a url'''
+    headers = {"User-Agent":"Mozilla/5.0"}
+    r = requests.get(url, headers=headers)
+    return r.text
+
+
+def split_by_commas(string):
+    '''return list of items split by commas and stripped of whitespace'''
+    return string.partition(", ")
+
+def update_local_copies():
+    recs_local = recs.get_all_values()
+    legend_local = legend.get_all_values()
+    first_blank_line = recs.col_values(1).index('')+1
+    converted_legend = convert_legend_to_multiple_tags(legend_local)
+    first_blank_legend_line = legend.col_values(1).index('')+1
+
+
+def convert_legend_to_multiple_tags(filterlegend):
+    '''convert_legend_to_multiple_tags(list) --> list
+    converts each row in a legend that says, ex. ['f9', 'season 9, season 10, post-series']
+    to a list ['f9', [season 9, season 10, post-series]]'''
+    newlegend = []
+    for row in filterlegend:
+        newlegend.append([row[0], row[1], split_by_commas(row[2])])
+    return newlegend
 
 recs_local = recs.get_all_values()
 legend_local = legend.get_all_values()
 converted_legend = convert_legend_to_multiple_tags(legend_local)
 
-first_blank_line = recs.col_values(1).index('')+1
-first_blank_legend_line = legend.col_values(1).index('')+1
-
-def update_local_copies():
-    global recs_local = recs.get_all_values()
-    global legend_local = legend.get_all_values()
-    global first_blank_line = recs.col_values(1).index('')+1
-    global converted_legend = convert_legend_to_multiple_tags(legend_local)
-    global first_blank_legend_line = legend.col_values(1).index('')+1
-
-
-def convert_legend_to_dict(filterlegend):
-    '''convert_legend_to_multiple_tags(list) --> list
-    converts each row in a legend that says, ex. ['f9', 'season 9, season 10, post-series']
-    to a list ['f9', [season 9, season 10, post-series]]'''
-    newlegend = {}
-    for row in filterlegend:
-        newlegend.append(row[0], row[1], split_by_commas(row[2]))
-    return newlegend
+first_blank_line = len(recs.col_values(1))+1
+first_blank_legend_line = len(legend.col_values(1))+1
 
 # # Extract and print all of the values
 # all_recs = recs.get_all_values()
@@ -164,39 +185,50 @@ client = pytumblr.TumblrRestClient(
 # https://samcaarter.tumblr.com/private/621914267347795968/tumblr_qchqnjlukx1r9gqxq
 # https://professortennant.tumblr.com/post/175193322905/samjack-rec-list-pt-1
 
-post_url = "https://starrybouquet.tumblr.com/post/620329944196710401/heya-any-suggestions-for-good-affinity-fix-it"
+# post_url = "https://starrybouquet.tumblr.com/post/620329944196710401/heya-any-suggestions-for-good-affinity-fix-it"
 
-def split_by_commas(string):
-    '''return list of items split by commas and stripped of whitespace'''
-    return string.partition(", ")
-
-def get_works(post_url, reccer):
+def get_works(post_url, reccer, tumblrPost=True):
     '''get works from tumblr url with links'''
 
-    if "/post/" in post_url:
-        post_url_split = post_url.partition("/post/")
-    elif "/private/" in post_url:
-        post_url_split = post_url.partition("/private/")
+    if tumblrPost:
+        if "/post/" in post_url:
+            post_url_split = post_url.partition("/post/")
+        elif "/private/" in post_url:
+            post_url_split = post_url.partition("/private/")
 
-    post_username = post_url_split[0].partition("https://")[2]
-    post_id = post_url_split[2].partition("/")[0]
+        post_username = post_url_split[0].partition("https://")[2]
+        post_id = post_url_split[2].partition("/")[0]
 
-    print("Parsing post from {}".format(post_username)) # check it worked
+        print("Parsing post from {}".format(post_username)) # check it worked
 
-    post = client.posts(post_username, id=post_id)['posts'][0]
-    content = post['trail'][0]['content'].split('<')
+        post = client.posts(post_username, id=post_id)['posts'][0]
+        content = post['trail'][0]['content'].split('<')
+        all_links = []
+        for line in content:
+            if "href=" in line:
+                link = line.split('"')[1]
+                all_links.append(link)
+
+    else:
+        html = html_from_url(post_url)
+        soup = BeautifulSoup(html, 'html.parser')
+        links_raw = [link.get('href') for link in soup.find_all('a')]
+        all_links = []
+        for link in links_raw:
+            r = requests.get(link)
+            if r.is_redirect:
+                all_links.append(r.url)
+                print("{0} was a redirect link, appended the following instead: {1}".format(link, r.url))
 
     authors = []
     works = []
-    for line in content:
-        if "href=" in line:
-            link = line.split('"')[1]
-            if ('/u/' in link) or ('/users/' in link):
-                authors.append(Author(link))
-            elif ('/s/' in link) or ('/works/' in link):
-                works.append(Work(link, reccer))
-            else:
-                print('{} is invalid link'.format(link))
+    for link in all_links:
+        if ('/u/' in link) or ('/users/' in link):
+            authors.append(Author(link))
+        elif ('/s/' in link) or ('/works/' in link):
+            works.append(Work(link, reccer))
+        else:
+            print('{} is an invalid link'.format(link))
 
 
     return works
@@ -252,11 +284,18 @@ def update_filter_legend():
             else:
                 filterrow = first_blank_legend_line
                 legend.update('A{0}:C{0}'.format(filterrow), [filterrow-1, new_filter_name, [tag]])
+                first_blank_legend_line += 1
 
     update_local_copies()
 
 
-
+works = get_works('https://samcaarter.tumblr.com/private/621914267347795968/tumblr_qchqnjlukx1r9gqxq', 'samcaarter', tumblrPost=False)
+print("We found {} works".format(len(works)))
+for work in works:
+    print(work.get_title())
+    add_work()
+    print('work added')
+    print()
 
 
 ## possible additions:
