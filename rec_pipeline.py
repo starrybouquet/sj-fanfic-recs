@@ -282,8 +282,8 @@ def works_from_links(linkList, reccer):
     works = []
     worksSinceSleep = 0
     for link in linkList:
-        if worksSinceSleep >= 30:
-            print('We have been through {} works. Pausing for 2 min so that we do not exceed requests.'.format(worksSinceSleep))
+        if worksSinceSleep >= 40:
+            print('We have been through {} works since last sleep. Pausing for 2 min so that we do not exceed requests.'.format(worksSinceSleep))
             time.sleep(120)
 
         if ('/u/' in link) or ('/users/' in link):
@@ -316,7 +316,7 @@ def get_works_from_bookmarks(mine=True):
         print(type(work))
         work.reload()
         if work.fandoms[0] == "Stargate SG-1":
-            bookmarked_works.append(Fic(work.url(), 'starrybouquet', existingAO3Work=work))
+            bookmarked_works.append(Fic(work.url, 'starrybouquet', existingAO3Work=work))
     return bookmarked_works
 
 def get_works_from_series(seriesid, reccer):
