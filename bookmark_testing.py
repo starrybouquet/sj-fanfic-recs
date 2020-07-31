@@ -1,6 +1,7 @@
 import AO3
-from rec_pipeline import Fic
 import time
+from classes import Fic
+import pickle
 
 def get_works_from_bookmarks(mine=True):
     '''
@@ -13,13 +14,16 @@ def get_works_from_bookmarks(mine=True):
 
     bookmarked_works = []
     for work in bookmarks:
-        if len(bookmarked_works) % 20 == 0:
+        if len(bookmarked_works) % 20 == 0 and len(bookmarked_works) != 0:
             print('Pausing for 2 min; we have been through {} bookmarks'.format(len(bookmarked_works)))
             time.sleep(120)
         print(type(work))
-        # work.reload()
+        work.reload()
         if work.fandoms[0] == "Stargate SG-1":
             bookmarked_works.append(Fic(work.url, 'starrybouquet', existingAO3Work=work))
     return bookmarked_works
 
-get_works_from_bookmarks()
+bookmarks = get_works_from_bookmarks()
+for work in bookmarks:
+    print(work.get_title())
+pickle.dump(bookmarks, open('bookmark_data.p', 'wb'))

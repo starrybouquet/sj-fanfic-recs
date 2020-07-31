@@ -13,6 +13,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 import time
+import pickle
 
 sites = {'ao3': 'archiveofourown.org',
             'ffn': 'fanfiction.net'}
@@ -282,9 +283,10 @@ def works_from_links(linkList, reccer):
     works = []
     worksSinceSleep = 0
     for link in linkList:
-        if worksSinceSleep >= 40:
+        if worksSinceSleep >= 30:
             print('We have been through {} works since last sleep. Pausing for 2 min so that we do not exceed requests.'.format(worksSinceSleep))
             time.sleep(120)
+            worksSinceSleep = 0
 
         if ('/u/' in link) or ('/users/' in link):
             print("Author link. Not going to create it because it's a hassle. Uncomment following line to create Authors.")
@@ -328,7 +330,7 @@ def get_works_from_series(seriesid, reccer):
         seriesparts.append(Fic(work.url, reccer, existingAO3Work=work))
     return seriesparts
 
-def add_work(work):
+def add_work(work, row_to_add):
     '''from Work class, check the gsheet and add to recs if it's not there.
     If it's already there, add reccer if they're not already there'''
     # use link to figure out if it's already there
@@ -344,53 +346,18 @@ def add_work(work):
     elif len(link_matches) == 0: # need to add fic
         workrow = first_blank_line
         recs.update('A{0}:J{0}'.format(workrow), [work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()])
-        first_blank_line += 1
-
-
-def add_filters(rownum):
-    '''add filters to recs sheet (NOT DATA ENTRY) based on categories/eps/seasons entered in doc (manually)'''
-    fictags = []
-    for col_index in range(5,8):
-        fictags.extend(split_by_commas(recs_local[rownum-1][col_index]))
-
-    filters_applicable = [legendrow[0] for legendrow in converted_legend if len(set(fictags) & set(legendrow[2])) > 0]
-    filters_string = ' '.join(filters_applicable)
-    recs.update('E{}'.format(rownum), filters_string)
-
-    return filters_applicable
-
-def update_filter_legend():
-    alltags = []
-    for col in range(6,9):
-        alltags.extend(recs.col_values(col))
-
-    unique_tags = set(alltags)
-
-    tag_exists = False
-    for tag in unique_tags:
-        for row in converted_legend:
-            if tag in row[2]:
-                tag_exists = True
-                break
-        if not tag_exists:
-            new_filter_name = str(input("The tag {} does not have a filter associated yet. Please enter filter name or 'skip' to skip: "))
-            if new_filter_name == "skip":
-                continue
-            else:
-                filterrow = first_blank_legend_line
-                legend.update('A{0}:C{0}'.format(filterrow), [filterrow-1, new_filter_name, [tag]])
-                first_blank_legend_line += 1
-
-    update_local_copies()
 
 
 # work_links = print(get_works('', source='file', filename='samcaarter_reclist.html'))
-work_links = ['https://samcaarter.tumblr.com/tagged/sg1%20meme', 'https://samcaarter.tumblr.com/', 'https://samcaarter.tumblr.com/ask', 'https://samcaarter.tumblr.com/made%20by%20me', 'https://samcaarter.tumblr.com/stargategifs', 'https://lutherwest.tumblr.com/', 'https://archiveofourown.org/works/190494', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/1352761', 'https://archiveofourown.org/users/missparker/pseuds/missparker', 'https://archiveofourown.org/series/2545', 'https://archiveofourown.org/users/ziparumpazoo/pseuds/ziparumpazoo', 'https://archiveofourown.org/works/3216521', 'https://archiveofourown.org/users/geneeste/pseuds/geneeste', 'https://archiveofourown.org/works/2721791', 'https://archiveofourown.org/users/iblamethenubbins/pseuds/iblamethenubbins', 'https://archiveofourown.org/works/205063', 'https://archiveofourown.org/users/openended/pseuds/openended', 'https://archiveofourown.org/works/1606748', 'https://archiveofourown.org/users/bluemoonmaverick/pseuds/bluemoonmaverick', 'https://archiveofourown.org/works/71004', 'https://archiveofourown.org/users/draco_somnians/pseuds/draco_somnians', 'https://archiveofourown.org/works/20048035', 'https://archiveofourown.org/users/sharim28/pseuds/sharim28', 'https://archiveofourown.org/works/14122146', 'https://archiveofourown.org/users/NiceHatGeorgia/pseuds/NiceHatGeorgia', 'https://archiveofourown.org/works/16431680', 'https://archiveofourown.org/users/sharim28/pseuds/sharim28', 'https://archiveofourown.org/series/563059', 'https://archiveofourown.org/users/amaradangeli/pseuds/amaradangeli', 'https://archiveofourown.org/works/19245739', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/16021202', 'https://archiveofourown.org/users/Joracwyn/pseuds/Joracwyn', 'https://archiveofourown.org/works/20343862', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/22993711', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/series/294347', 'https://archiveofourown.org/users/fems/pseuds/fems', 'https://archiveofourown.org/works/789410', 'https://archiveofourown.org/users/missparker/pseuds/missparker', 'https://archiveofourown.org/series/7737', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/5186969', 'https://archiveofourown.org/users/3starJeneral/pseuds/3starJeneral', 'https://archiveofourown.org/works/23674651', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/73476', 'https://archiveofourown.org/users/mrspollifax/pseuds/mrspollifax', 'https://archiveofourown.org/works/202540', 'https://archiveofourown.org/users/nextgreatadventure/pseuds/nextgreatadventure', 'https://archiveofourown.org/works/2036757', 'https://archiveofourown.org/users/KimberleyJackson/pseuds/Kimberley%2520Jackson', 'https://archiveofourown.org/works/3096419', 'https://archiveofourown.org/users/bluemoonmaverick/pseuds/bluemoonmaverick', 'https://archiveofourown.org/works/1167621', 'https://archiveofourown.org/users/mrspollifax/pseuds/mrspollifax', 'https://archiveofourown.org/works/24787213', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/1144191', 'https://archiveofourown.org/users/bluemoonmaverick/pseuds/bluemoonmaverick', 'https://archiveofourown.org/works/3234047', 'https://archiveofourown.org/users/bluemoonmaverick/pseuds/bluemoonmaverick', 'https://archiveofourown.org/works/1707398', 'https://archiveofourown.org/users/splash_the_cat/pseuds/splash_the_cat', 'https://archiveofourown.org/works/219878', 'https://archiveofourown.org/users/nextgreatadventure/pseuds/nextgreatadventure', 'https://archiveofourown.org/works/17121407', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/4440479', 'https://archiveofourown.org/users/indiefic/pseuds/indiefic', 'https://archiveofourown.org/works/204232', 'https://archiveofourown.org/users/mrv3000/pseuds/mrv3000', 'https://archiveofourown.org/works/16374518', 'https://archiveofourown.org/users/Sarah_M/pseuds/Sarah_M', 'https://archiveofourown.org/works/17652089', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/17688413', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/138238', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/2135820', 'https://archiveofourown.org/users/Salr323/pseuds/Salr323', 'https://archiveofourown.org/works/188755', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/17643473', 'https://archiveofourown.org/users/Sarah_M/pseuds/Sarah_M', 'https://archiveofourown.org/works/386073', 'https://archiveofourown.org/users/NellieOleson/pseuds/NellieOleson', 'https://archiveofourown.org/series/5002', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/189162', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/206266', 'https://archiveofourown.org/users/Rachel500/pseuds/Rachel500', 'https://archiveofourown.org/works/122238', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/223489', 'https://archiveofourown.org/users/Callie/pseuds/Callie', 'https://archiveofourown.org/works/2714642', 'https://archiveofourown.org/users/callista1159/pseuds/callista1159', 'https://archiveofourown.org/works/598565', 'https://archiveofourown.org/users/mrspollifax/pseuds/mrspollifax', 'https://archiveofourown.org/works/188743', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/8111635', 'https://archiveofourown.org/users/Alicesandra/pseuds/Alicesandra', 'https://archiveofourown.org/works/1142831', 'https://archiveofourown.org/users/Salr323/pseuds/Salr323', 'https://archiveofourown.org/works/148927', 'https://archiveofourown.org/users/nandamai/pseuds/nanda', 'https://archiveofourown.org/works/280910', 'https://archiveofourown.org/users/Rachel500/pseuds/Rachel500', 'https://archiveofourown.org/works/188898', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/108702', 'https://archiveofourown.org/users/mrspollifax/pseuds/mrspollifax', 'https://archiveofourown.org/works/57533', 'https://archiveofourown.org/users/mrspollifax/pseuds/mrspollifax', 'https://archiveofourown.org/works/14453', 'https://archiveofourown.org/users/gabolange/pseuds/gabolange', 'https://archiveofourown.org/works/423381', 'https://archiveofourown.org/users/mscorkill/pseuds/Sue%2520Corkill', 'https://archiveofourown.org/works/11827', 'https://archiveofourown.org/users/mrspollifax/pseuds/mrspollifax', 'https://archiveofourown.org/works/625293', 'https://archiveofourown.org/users/mrspollifax/pseuds/mrspollifax', 'https://archiveofourown.org/works/54982', 'https://archiveofourown.org/users/Ayiana/pseuds/Ayiana', 'https://archiveofourown.org/works/19425232', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/108951', 'https://archiveofourown.org/users/ziparumpazoo/pseuds/ziparumpazoo', 'https://archiveofourown.org/works/4881100', 'https://archiveofourown.org/users/Akamaimom/pseuds/Akamaimom', 'https://archiveofourown.org/works/259294', 'https://archiveofourown.org/users/adventurepants/pseuds/adventurepants', 'https://archiveofourown.org/works/21112469', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/528143', 'https://archiveofourown.org/users/nandamai/pseuds/nanda', 'https://archiveofourown.org/works/18376724', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/series/5939', 'https://archiveofourown.org/users/nandamai/pseuds/nanda', 'https://archiveofourown.org/works/379543', 'https://archiveofourown.org/users/NellieOleson/pseuds/NellieOleson', 'https://archiveofourown.org/works/1138665', 'https://archiveofourown.org/users/AKarswyll/pseuds/AKarswyll', 'https://archiveofourown.org/works/337730', 'https://archiveofourown.org/users/openended/pseuds/openended', 'https://archiveofourown.org/works/19013830', 'https://archiveofourown.org/users/Sarah_M/pseuds/Sarah_M', 'https://archiveofourown.org/works/24218371', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/24689800', 'https://archiveofourown.org/users/samcaarter/pseuds/samcaarter', 'https://archiveofourown.org/works/189170', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/134933', 'https://archiveofourown.org/users/missparker/pseuds/missparker', 'https://archiveofourown.org/works/18773773', 'https://archiveofourown.org/users/CoraClavia/pseuds/CoraClavia', 'https://archiveofourown.org/works/148502', 'https://archiveofourown.org/users/nandamai/pseuds/nanda', 'https://archiveofourown.org/works/855281', 'https://archiveofourown.org/users/NellieOleson/pseuds/NellieOleson', 'https://archiveofourown.org/works/1214026', 'https://archiveofourown.org/users/Salr323/pseuds/Salr323', 'https://archiveofourown.org/works/6496', 'https://archiveofourown.org/users/ziparumpazoo/pseuds/ziparumpazoo', 'https://archiveofourown.org/works/214352', 'https://archiveofourown.org/users/Annerb/pseuds/Annerb', 'https://archiveofourown.org/works/16806', 'https://archiveofourown.org/users/dizzy/pseuds/dizzy', 'https://archiveofourown.org/works/6715675', 'https://archiveofourown.org/users/amaradangeli/pseuds/amaradangeli', 'https://archiveofourown.org/works/16292300', 'https://archiveofourown.org/users/Sarah_M/pseuds/Sarah_M', 'https://archiveofourown.org/works/10739001', 'https://archiveofourown.org/users/amaradangeli/pseuds/amaradangeli', 'https://archiveofourown.org/works/9333437', 'https://archiveofourown.org/users/amaradangeli/pseuds/amaradangeli', 'https://samcaarter.tumblr.com/post/621914267347795968/aus-string-theory-an-au-series-by-annerb-doctor', 'https://www.tumblr.com/reblog/621914267347795968/vasPdCdQ']
+work_links = pickle.load(open('old_data.p', 'rb'))
 works = works_from_links(work_links, 'samcaarter')
-print("We found {} works".format(len(works)))
+pickle.dump(works, open('works_found.p', 'wb'))
+print("We found {} works. Dumped them in works_found.p for safekeeping.".format(len(works)))
+
 for work in works:
     print(work.get_title())
-    add_work(work)
+    add_work(work, first_blank_line)
+    first_blank_line += 1
     print('work added')
     print()
 
