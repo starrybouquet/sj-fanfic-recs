@@ -60,9 +60,9 @@ class Fic(Link):
                 self.isAdult = False
         else:
             if self.site == 'ao3':
-                self.id = self.link.partition('/works/')[2]
+                self.id = AO3.utils.workid_from_url(url)
                 try:
-                    me = AO3.work(id=self.id)
+                    me = AO3.Work(self.id)
                 except RestrictedWork:
                     self.title = 'restricted; please enter manually'
                     self.desc = 'restricted; please enter manually'
@@ -194,6 +194,27 @@ client = pytumblr.TumblrRestClient(
 
 # post_url = "https://starrybouquet.tumblr.com/post/620329944196710401/heya-any-suggestions-for-good-affinity-fix-it"
 
+
+def strip_redirect_link(url):
+    replacements = [['%3A', ':'],
+                    ['%2F', '/']]
+
+    start_index = url.find('z=')+2
+    end_index = url.find('&t')
+    if start_index != -1 and end_index != -1:
+        short_url = url[start_index:end_index]
+        oldurl = short_url
+        realurl = ''
+        for charset in replacements:
+            realurl = oldurl.replace(charset[0], charset[1])
+            oldurl = realurl
+
+        return realurl
+
+    else:
+        print("Link could not be stripped. Returning url given.")
+        return url
+
 def get_works(post_url, reccer, tumblrPost=True):
     '''get works from tumblr url with links'''
 
@@ -221,10 +242,15 @@ def get_works(post_url, reccer, tumblrPost=True):
         soup = BeautifulSoup(html, 'html.parser')
         links_raw = [link.get('href') for link in soup.find_all('a')]
         all_links = []
+        requests_session = requests.Session()
         for link in links_raw:
-            r = requests.get(link)
+            r = requests_session.get(link)
             print("Link is currently {}".format(r.url))
-            print("Trying redirect link:")
+            # redirectedlink = requests_session.get_redirect_target(r)
+            # print("Trying redirect link. Redirected gives {}".format(redirectedlink))
+            redirectedlink = strip_redirect_link(link)
+            print("Tried to strip redirect link manually. This is what we got {}".format(redirectedlink))
+            all_links.append(redirectedlink)
 
     authors = []
     works = []
@@ -251,7 +277,8 @@ def get_works_from_bookmarks(mine=True):
     bookmarked_works = []
     for work in bookmarks:
         print(type(work))
-        if work.fandom() == "Stargate SG-1":
+        work.reload()
+        if work.fandoms()[0] == "Stargate SG-1":
             bookmarked_works.append(Fic(work.url(), 'starrybouquet', existingAO3Work=work))
     return bookmarked_works
 
@@ -311,19 +338,20 @@ def update_filter_legend():
     update_local_copies()
 
 
-# works = get_works('https://samcaarter.tumblr.com/private/621914267347795968/tumblr_qchqnjlukx1r9gqxq', 'samcaarter', tumblrPost=False)
-# print("We found {} works".format(len(works)))
-# for work in works:
-#     print(work.get_title())
-#     add_work()
-#     print('work added')
-#     print()
+works = get_works('https://samcaarter.tumblr.com/private/621914267347795968/tumblr_qchqnjlukx1r9gqxq', 'samcaarter', tumblrPost=False)
+print("We found {} works".format(len(works)))
+for work in works:
+    print(work.get_title())
+    add_work()
+    print('work added')
+    print()
 
-w = get_works_from_bookmarks()
-for title in w:
-    print(w.get_title())
+# w = get_works_from_bookmarks()
+# for title in w:
+#     print(w.get_title())
 
 
 ## possible additions:
 # - get some filters from tags on work
 # - ??
+#
