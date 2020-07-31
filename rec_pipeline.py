@@ -122,17 +122,30 @@ client = gspread.authorize(creds)
 # Find workbook and open sheets
 recs = client.open("SJ Masterlist Data").get_worksheet(1)
 legend = client.open("SJ Masterlist Data").get_worksheet(2)
-data_out = client.open("SJ Masterlist Data").get_worksheet(0)
 
 recs_local = recs.get_all_values()
 legend_local = legend.get_all_values()
+converted_legend = convert_legend_to_multiple_tags(legend_local)
 
 first_blank_line = recs.col_values(1).index('')+1
+first_blank_legend_line = legend.col_values(1).index('')+1
 
 def update_local_copies():
     global recs_local = recs.get_all_values()
     global legend_local = legend.get_all_values()
-    first_blank_line = recs.col_values(1).index('')+1
+    global first_blank_line = recs.col_values(1).index('')+1
+    global converted_legend = convert_legend_to_multiple_tags(legend_local)
+    global first_blank_legend_line = legend.col_values(1).index('')+1
+
+
+def convert_legend_to_dict(filterlegend):
+    '''convert_legend_to_multiple_tags(list) --> list
+    converts each row in a legend that says, ex. ['f9', 'season 9, season 10, post-series']
+    to a list ['f9', [season 9, season 10, post-series]]'''
+    newlegend = {}
+    for row in filterlegend:
+        newlegend.append(row[0], row[1], split_by_commas(row[2]))
+    return newlegend
 
 # # Extract and print all of the values
 # all_recs = recs.get_all_values()
@@ -208,8 +221,40 @@ def add_work(work):
 
 
 def add_filters(rownum):
-    '''add filters based on categories/eps/seasons entered in doc (manually)'''
-    pass
+    '''add filters to recs sheet (NOT DATA ENTRY) based on categories/eps/seasons entered in doc (manually)'''
+    fictags = []
+    for col_index in range(5,8):
+        fictags.extend(split_by_commas(recs_local[rownum-1][col_index]))
+
+    filters_applicable = [legendrow[0] for legendrow in converted_legend if len(set(fictags) & set(legendrow[2])) > 0]
+    filters_string = ' '.join(filters_applicable)
+    recs.update('E{}'.format(rownum), filters_string)
+
+    return filters_applicable
+
+def update_filter_legend():
+    alltags = []
+    for col in range(6,9):
+        alltags.extend(recs.col_values(col))
+
+    unique_tags = set(alltags)
+
+    tag_exists = False
+    for tag in unique_tags:
+        for row in converted_legend:
+            if tag in row[2]:
+                tag_exists = True
+                break
+        if not tag_exists:
+            new_filter_name = str(input("The tag {} does not have a filter associated yet. Please enter filter name or 'skip' to skip: "))
+            if new_filter_name == "skip":
+                continue
+            else:
+                filterrow = first_blank_legend_line
+                legend.update('A{0}:C{0}'.format(filterrow), [filterrow-1, new_filter_name, [tag]])
+
+    update_local_copies()
+
 
 
 
