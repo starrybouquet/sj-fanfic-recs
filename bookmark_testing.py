@@ -18,7 +18,10 @@ def get_works_from_bookmarks(mine=True):
             print('Pausing for 2 min; we have been through {} bookmarks'.format(len(bookmarked_works)))
             time.sleep(120)
         print(type(work))
-        work.reload()
+        try:
+            work.reload()
+        except AuthError:
+            print("Work was restricted, skipping. Work id was {}".format(work.workid))
         if work.fandoms[0] == "Stargate SG-1":
             bookmarked_works.append(Fic(work.url, 'starrybouquet', existingAO3Work=work))
     return bookmarked_works
