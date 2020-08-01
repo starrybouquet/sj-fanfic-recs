@@ -64,7 +64,7 @@ class Fic(Link):
 
                 self.title = me.title
                 self.desc = self.strip_html(me.summary)
-                self.author = me.authors[0] # may want to connect to author class
+                self.author = me.authors[0].username # may want to connect to author class
                 if (me.rating=='Mature') or (me.rating=='Explicit'):
                     self.isAdult = True
                 else:

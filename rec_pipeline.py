@@ -213,6 +213,7 @@ def get_recs_spreadsheet():
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
     client = gspread.authorize(creds)
+    print('credentials authorized.')
 
     recs = client.open_by_url('https://docs.google.com/spreadsheets/d/1_9-jjGIO4v1NgppU3ENDEE1itPbnDStyYzbx1J5_OfQ').get_worksheet(1)
 
@@ -254,11 +255,14 @@ def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
         return 0
 
     else: # need to add fic
-        recs_object.update('A{0}:J{0}'.format(row_to_add), [work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()])
+        recs_object.update('A{0}:J{0}'.format(row_to_add), [[work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()]])
         return 1
 
 
 # work_links = print(get_works('', source='file', filename='samcaarter_reclist.html'))
+#
+
+
 recursion_depth = 3000
 sys.setrecursionlimit(recursion_depth)
 work_links = pickle.load(open('old_data.p', 'rb'))
@@ -282,6 +286,13 @@ for work in works:
     first_blank_line += add_work(work, first_blank_line, all_links, recs_local, recs)
     print('work added')
     print()
+
+# w = Fic('https://archiveofourown.org/works/17133743', 'starrybouquet')
+# recs, recs_local = get_recs_spreadsheet()
+# first_blank_line = len(recs.col_values(1))+1
+# all_links = recs.col_values(4)
+# add_work(w, first_blank_line, all_links, recs_local, recs)
+
 
 # w = get_works_from_bookmarks()
 # for title in w:
