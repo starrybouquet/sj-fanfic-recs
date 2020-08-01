@@ -43,8 +43,8 @@ class Fic(Link):
         self.url = raw_link
         if existingAO3Work:
             self.title = existingAO3Work.title
-            self.desc = existingAO3Work.summary
-            self.author = existingAO3Work.authors[0] # may want to connect to author class
+            self.desc = existingAO3Work.summary[1:]
+            self.author = str(existingAO3Work.authors[0].username) # may want to connect to author class
             if (existingAO3Work.rating=='Mature') or (existingAO3Work.rating=='Explicit'):
                 self.isAdult = True
             else:
@@ -64,7 +64,7 @@ class Fic(Link):
 
                 self.title = me.title
                 self.desc = self.strip_html(me.summary)
-                self.author = me.authors[0].username # may want to connect to author class
+                self.author = str(me.authors[0].username) # may want to connect to author class
                 if (me.rating=='Mature') or (me.rating=='Explicit'):
                     self.isAdult = True
                 else:
