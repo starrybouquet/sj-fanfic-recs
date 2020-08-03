@@ -37,7 +37,7 @@ class Link(object):
 class Fic(Link):
     '''works from ao3 or ffn'''
 
-    def __init__(self, raw_link, reccer, existingAO3Work=False):
+    def __init__(self, raw_link, reccer, existingAO3Work=False, existingFFNStory=False, ffn_users_loaded=[]):
         super().__init__(raw_link)
         self.reccer = reccer
         self.url = raw_link
@@ -46,6 +46,17 @@ class Fic(Link):
             self.desc = existingAO3Work.summary[1:]
             self.author = str(existingAO3Work.authors[0].username) # may want to connect to author class
             if (existingAO3Work.rating=='Mature') or (existingAO3Work.rating=='Explicit'):
+                self.isAdult = True
+            else:
+                self.isAdult = False
+        elif existingFFNStory:
+            existingFFNStory.download_data()
+            self.title = existingFFNStory.title
+            self.desc = existingFFNStory.description
+            author_obj = existingFFNStory.get_user()
+            author_obj.download_data()
+            self.author = author_obj.username
+            if existingFFNStory.rated == 'M':
                 self.isAdult = True
             else:
                 self.isAdult = False
