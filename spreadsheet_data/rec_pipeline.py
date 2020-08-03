@@ -251,7 +251,7 @@ def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
         reccers = recs_sheet[workrow][9]
         if work.get_reccer() not in reccers:
             newvalue = reccers + ", " + work.get_reccer()
-            recs_object.update_cell(workrow, 10, newvalue)
+            recs_object.update_cell(workrow+1, 10, newvalue)
         return 0
 
     else: # need to add fic
@@ -262,28 +262,25 @@ def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
 # work_links = print(get_works('', source='file', filename='samcaarter_reclist.html'))
 #
 
+#
+# recursion_depth = 3000
+# sys.setrecursionlimit(recursion_depth)
+# work_links = pickle.load(open('old_data.p', 'rb'))
+# #
+# works = multiple_works_from_links(work_links, 'samcaarter')
+# print("We found {} works. List below:".format(len(works)))
+# for work in works:
+#     print(work.get_title())
+# print()
+# print("Trying to put them in pickle now.")
+# try:
+#     pickle.dump(works, open('works_found.p', 'wb'))
+#     print()
+#     print("Successfully dumped, now adding to spreadsheet")
+# except RecursionError:
+#     print("Recursion error occurred with depth {}, skipping pickle dump.".format(sys.getrecursionlimit()))
 
-recursion_depth = 3000
-sys.setrecursionlimit(recursion_depth)
-work_links = pickle.load(open('old_data.p', 'rb'))
-# num_works, wlist = single_work_from_link(work_links[12], 'samcaarter')
-# w = wlist[0]
-# print("Testing single work.")
-# print("Title: {0}   Type: {1}".format(w.get_title(), type(w.get_title())))
-# print("Author: {0}   Type: {1}".format(w.get_author(), type(w.get_author())))
-# print("Desc: {0}   Type: {1}".format(w.get_desc(), type(w.get_desc())))
-works = multiple_works_from_links(work_links, 'samcaarter')
-print("We found {} works. List below:".format(len(works)))
-for work in works:
-    print(work.get_title())
-print()
-print("Trying to put them in pickle now.")
-try:
-    pickle.dump(works, open('works_found.p', 'wb'))
-    print()
-    print("Successfully dumped, now adding to spreadsheet")
-except RecursionError:
-    print("Recursion error occurred with depth {}, skipping pickle dump.".format(sys.getrecursionlimit()))
+works = pickle.load(open('bookmark_data.p', 'rb'))
 recs, recs_local = get_recs_spreadsheet()
 first_blank_line = len(recs.col_values(1))+1
 all_links = recs.col_values(4)
