@@ -26,7 +26,7 @@ def get_works_from_bookmarks(username, mine=False):
             work.reload()
             try:
                 if work.fandoms[0] == "Stargate SG-1":
-                    bookmarked_works.append(Fic(work.url, 'starrybouquet', existingAO3Work=work))
+                    bookmarked_works.append(Fic(work.url, username, existingAO3Work=work))
                     print('Added work {}'.format(work.title))
             except:
                 broken_ids.append("{0} (id {1})".format(work.title, work.workid))

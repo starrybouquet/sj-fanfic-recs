@@ -1,6 +1,8 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+import time
+
 
 def html_from_url(url):
     '''uses requests to get html in str form (for BeautifulSoup) given a url'''
@@ -17,6 +19,7 @@ def get_spreadsheets():
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
     client = gspread.authorize(creds)
+    print('credentials authorized')
 
     # Find workbook and open sheets
     recs = client.open_by_url('https://docs.google.com/spreadsheets/d/1_9-jjGIO4v1NgppU3ENDEE1itPbnDStyYzbx1J5_OfQ').get_worksheet(1)
@@ -113,5 +116,10 @@ def update_filter_legend(sheet_data):
 
 
 sheetdata = get_spreadsheets()
-for r in range(160, 231):
+update_filter_legend(sheetdata)
+sheetdata = get_spreadsheets()
+for r in range(286, 842):
+    if r % 80 == 0:
+        print('pausing for 2 min, on row {}'.format(r))
+        time.sleep(120)
     add_filters(r, sheetdata[0], sheetdata[2], sheetdata[4])

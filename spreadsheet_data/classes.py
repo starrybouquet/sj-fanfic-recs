@@ -51,7 +51,7 @@ class Fic(Link):
             else:
                 self.isAdult = False
         elif existingFFNStory:
-            self.site = 'FFN'
+            self.site = 'ffn'
             existingFFNStory.download_data()
             self.url = existingFFNStory.url
             self.title = existingFFNStory.title
