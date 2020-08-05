@@ -1,9 +1,10 @@
 import AO3
 import time
 from classes import Fic
+from reader import Reader
 import pickle
 
-def get_works_from_bookmarks(mine=True):
+def get_works_from_bookmarks(username, mine=False):
     '''
     Returns list of Works, one per bookmark
     '''
@@ -11,6 +12,9 @@ def get_works_from_bookmarks(mine=True):
         pw = str(input("Please input password: "))
         session = AO3.Session("starrybouquet", pw)
         bookmarks = session.get_bookmarks()
+    else:
+        reader = Reader(username)
+        bookmarks = reader.get_bookmarks()
 
     bookmarked_works = []
     broken_ids = []
@@ -20,19 +24,19 @@ def get_works_from_bookmarks(mine=True):
             time.sleep(120)
         try:
             work.reload()
+            try:
+                if work.fandoms[0] == "Stargate SG-1":
+                    bookmarked_works.append(Fic(work.url, 'starrybouquet', existingAO3Work=work))
+                    print('Added work {}'.format(work.title))
+            except:
+                broken_ids.append("{0} (id {1})".format(work.title, work.workid))
+                print("Work had no fandom, id was {}".format(work.workid))
         except:
             broken_ids.append(work.workid)
             print("Work was restricted, skipping. Work id was {}".format(work.workid))
-        try:
-            if work.fandoms[0] == "Stargate SG-1":
-                bookmarked_works.append(Fic(work.url, 'starrybouquet', existingAO3Work=work))
-                print('Added work {}'.format(work.title))
-        except:
-            broken_ids.append(work.workid)
-            print("Work had no fandom, id was {}".format(work.workid))
     return bookmarked_works, broken_ids
 
-bookmarks, please_check_these_works = get_works_from_bookmarks()
+bookmarks, please_check_these_works = get_works_from_bookmarks('lilianbones')
 for work in bookmarks:
     print(work.get_title())
 pickle.dump(bookmarks, open('bookmark_data.p', 'wb'))

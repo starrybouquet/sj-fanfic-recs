@@ -4,7 +4,7 @@ import time
 import pickle
 
 def get_faves_from_user(user_url):
-    author = ffnet.User(url='https://www.fanfiction.net/u/12066707/')
+    author = ffnet.User(url='user_url')
     author.download_data()
 
     favorite_works = []
@@ -16,12 +16,12 @@ def get_faves_from_user(user_url):
             time.sleep(120)
         print(story.fandoms)
         if 'Stargate: SG-1' in story.fandoms:
-            print('Found {} SG-1 story'.format(story.title))
+            print('Found SG-1 story {}'.format(story.title))
             favorite_works.append(Fic('', 'starrybouquet', existingFFNStory=story))
 
     return favorite_works
 
-faves = get_faves_from_user('https://www.fanfiction.net/u/12066707/')
+faves = get_faves_from_user('https://www.fanfiction.net/u/1327870/')
 
 for work in faves:
     print(work.get_title())

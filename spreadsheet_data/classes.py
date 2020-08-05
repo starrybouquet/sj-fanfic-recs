@@ -42,6 +42,7 @@ class Fic(Link):
         self.reccer = reccer
         self.url = raw_link
         if existingAO3Work:
+            self.site = 'AO3'
             self.title = existingAO3Work.title
             self.desc = existingAO3Work.summary[1:]
             self.author = str(existingAO3Work.authors[0].username) # may want to connect to author class
@@ -50,7 +51,9 @@ class Fic(Link):
             else:
                 self.isAdult = False
         elif existingFFNStory:
+            self.site = 'FFN'
             existingFFNStory.download_data()
+            self.url = existingFFNStory.url
             self.title = existingFFNStory.title
             self.desc = existingFFNStory.description
             author_obj = existingFFNStory.get_user()
