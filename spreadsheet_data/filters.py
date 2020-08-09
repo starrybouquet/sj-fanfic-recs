@@ -118,8 +118,8 @@ def update_filter_legend(sheet_data):
 sheetdata = get_spreadsheets()
 update_filter_legend(sheetdata)
 sheetdata = get_spreadsheets()
-for r in range(286, 842):
-    if r % 80 == 0:
+for r in range(286, 822):
+    if r % 90 == 0:
         print('pausing for 2 min, on row {}'.format(r))
         time.sleep(120)
     add_filters(r, sheetdata[0], sheetdata[2], sheetdata[4])

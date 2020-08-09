@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+
+<!--PAGE THEME #11: SUCCULENT by @nonspace.
+  Find more of my work at https://nonspace.tumblr.com
+
+    Don't steal.
+    Don't claim as your own.
+    Don't use as base code.
+    Editing for personal use is fine!
+
+    Need help? Have a look at this themes FAQ:
+    https://nonspace.tumblr.com/tagged/theme-help:+succulent
+    Or my general FAQ: https://nonspace.tumblr.com/help/support
+
+    Please report any bugs to me.
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/png" href="{Favicon}">
+  <title>{Title}</title>
+
+  <!--jQuery-->
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+
+  <!--ISOTOPE PLUGIN https://isotope.metafizzy.co/ (for filtering)-->
+  <!--<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>-->
+
+  <!--BRICKS.JS PLUGIN FOR LAYOUT-->
+  <script src="https://unpkg.com/bricks.js@1.8.0/dist/bricks.js"></script>
+
+  <!--Icon Fonts-->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
+
+  <!--Google Fonts-->
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+
+<!--SETTINGS-->
+<!--The template spreadsheet is here:
+https://docs.google.com/spreadsheets/d/124yZTS885Mx4BYFN4PPxjP450LrRrTMmTubI0MoI4WE/edit?usp=sharing
+Instructions are in the "INSTRUCTIONS" tab.
+-->
+
+<!--If you use it without the spreadsheet delete or uncomment this script-->
+<script>
+ // ID of your Google Spreadsheet
+ var spreadsheetID = "1_9-jjGIO4v1NgppU3ENDEE1itPbnDStyYzbx1J5_OfQ";
+</script>
+
+<style>
+:root {
+  --fontSize: 16px;
+  --cardWidth: 500px; /*entire card*/
+  --imgHeight: 250px;
+
+  --accent: {AccentColor};
+  --background: #eee;
+  --sidebarBackground: #111;
+  --sidebarText: #fff;
+  --cardBackground: #fff;
+  --cardText: #111;
+  --cardHover: #bddcf2;
+}
+
+
+/*STYLES*/
+
+/*GENERAL*/
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-size: var(--fontSize);
+  font-family: 'Raleway';
+}
+
+#wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+
+/*SIDEBAR*/
+
+aside {
+  position: fixed;
+  width: 300px;
+  background: var(--sidebarBackground);
+  color: var(--sidebarText);
+  height: 100%;
+  z-index: 1;
+  font-family: 'Raleway';
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+aside h1,
+nav {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+aside h1 {
+  font-size: 1.5rem;
+}
+
+aside h1 {
+  display: block;
+  position: relative;
+}
+
+.sep {
+  height: 5px;
+  width: 50px;
+  background: var(--accent);
+  margin: 5px 0 13px;
+}
+
+button {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: inherit;
+  /*input has OS specific font-family*/
+  color: #069;
+  cursor: pointer;
+}
+
+nav {
+  padding: 25px 0 50px;
+}
+
+nav a {
+  position: relative;
+  text-decoration: none;
+  color: var(--sidebarText);
+}
+
+nav button {
+  position: relative;
+  text-decoration: none;
+  color: var(--sidebarText);
+  text-transform: uppercase;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+nav ul li {
+  list-style-type: none;
+  margin: 25px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dropdown-content {
+    display: none;
+    padding-left: 10%;
+}
+
+.subcategory {
+    display: none;
+    padding-left: 10%;
+    position: relative;
+    animation: fadeOut 1s;
+    float: left;
+    overflow: display;
+    text-transform: none;
+    font-weight: 400;
+}
+
+.subcategory .dropdown-content {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+
+    float: left;
+    overflow: display;
+}
+
+.subcategory .base-btn {
+    font-weight: 400 !important;
+    text-transform: none !important;
+}
+
+/*.right-menu-btn:hover .subcategory {*/
+/*    display: block;*/
+/*}*/
+
+.active {
+    background-color: rgb(255, 255, 255, 0.2);
+}
+
+.right-menu-btn:hover + .subcategory {
+    display: block;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+.dropdown-content li:hover .subcategory {
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+    display: block;
+}
+
+#abt {
+  line-height: 160%;
+}
+
+#social {
+  list-style-type: none;
+  margin-top: auto;
+  align-self: bottom;
+}
+
+#social a {
+  color: var(--sidebarText);
+}
+
+#social li {
+  display: inline-block;
+  margin: 0 15px 0 0;
+}
+
+
+/*GRID*/
+
+main {
+  position: relative;
+  width: calc(100% - 300px);
+  min-height: 100vh;
+  height: auto;
+  margin-left: 300px;
+  background: var(--background);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 35px 35px;
+  border-left: 20px solid var(--accent);
+}
+
+#grid {
+  margin: 0 auto;
+  width: calc(var(--cardWidth) + 30px);
+}
+
+
+/*CARDS*/
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: var(--cardWidth);
+  overflow: hidden;
+  margin: 15px;
+  color: var(--cardText);
+}
+
+.card > a {
+  line-height: 0;
+  position: relative;
+  color: #000;
+  text-decoration: none;;
+}
+
+.card img {
+  width: var(--cardWidth);
+  height: var(--imgHeight);
+  object-fit: cover;
+  line-height: 0;
+}
+
+/* The "show" class is added to the filtered elements */
+.show {
+  display: block;
+}
+
+.box {
+  position: relative;
+  background: var(--cardBackground);
+  height: auto;
+  padding: 15px 20px 0;
+  line-height: 160%;
+  overflow: hidden;
+  border-bottom: 15px solid var(--cardBackground);
+}
+
+/*.box:hover {*/
+/*    background: var(--cardHover);*/
+/*    transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);*/
+/*}*/
+
+/*.card {*/
+/* -webkit-box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.1);*/
+/*  -moz-box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.1);*/
+/*  box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.1);*/
+/*}*/
+
+aside {
+ -webkit-box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 0px 40px -10px rgba(0,0,0,0.3);
+  box-shadow: 0px 0px 15px -0px rgba(0,0,0,0.5);
+}
+
+.box h2 {
+  font-size: 1.1rem;
+  font-family: 'Raleway';
+  text-transform: uppercase;
+}
+
+.box .desc {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.box .desc p:not(first-of-type) {
+  margin-top: 15px;
+}
+
+.box a, #abt a {
+  color: var(--boxText);
+  text-decoration: none;
+  box-shadow: inset 0 -5px var(--accent);
+}
+
+
+/*OVERLAY*/
+
+/*.overlay {*/
+/*  background: rgba(0,0,0,0.3);*/
+/*  position: absolute;*/
+/*  height: 100%;*/
+/*  width: 100%;*/
+/*  left: 0;*/
+/*  top: 0;*/
+/*  bottom: 0;*/
+/*  right: 0;*/
+/*  opacity: 0;*/
+/*  -webkit-transition: all 0.4s ease-in-out 0s;*/
+/*  -moz-transition: all 0.4s ease-in-out 0s;*/
+/*  transition: all 0.4s ease-in-out 0s;*/
+/*}*/
+
+/*.overlay-text {*/
+/*  position: absolute;*/
+/*  text-align: center;*/
+/*  padding-left: 1em;*/
+/*  padding-right: 1em;*/
+/*  width: 100%;*/
+/*  top: 80%;*/
+/*  left: 50%;*/
+/*  opacity: 0;*/
+/*  -webkit-transform: translate(-50%, -50%);*/
+/*  -moz-transform: translate(-50%, -50%);*/
+/*  transform: translate(-50%, -50%);*/
+/*  -webkit-transition: all 0.3s ease-in-out 0s;*/
+/*  -moz-transition: all 0.3s ease-in-out 0s;*/
+/*  transition: all 0.3s ease-in-out 0s;*/
+/*  font-size: 500%;*/
+/*}*/
+
+.card > a:hover .overlay {
+  opacity: 1;
+}
+.card > a:hover .overlay-text {
+  opacity: 1;
+  top: 50%;
+  left: 50%;
+}
+
+
+/*ANIMATION KEYFRAMES*/
+
+@-webkit-keyframes fadeIn  {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  80% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  80% { opacity: 0.9; }
+  100% { opacity: 1; }
+}
+
+main {
+  -webkit-animation-duration: 0.8s;
+  animation-name: fadeIn;
+  animation-duration: 0.8s;
+}
+
+#title a {
+    text-decoration: none;
+    color: #fff;
+}
+
+
+/*HOVER*/
+
+a {
+  transition: all 0.2s ease-in-out;
+}
+
+nav a:before {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 3px;
+  top: 80%;
+  margin-top: -0.5px;
+  background: var(--accent);
+}
+
+nav a:before {
+  left: -2.5px;
+}
+
+nav a:hover:before {
+  background: var(--accent);
+  width: 100%;
+  height: 20%;
+  transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+nav a:hover:after {
+  background: var(--accent);
+  width: 100%;
+  height: 20%;
+  transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+#social a:hover {
+  color: var(--accent);
+}
+
+
+/*MEDIA QUIERIES*/
+
+@media only screen and (max-width: 720px) {
+  body > iframe:first-of-type {
+    top: 80px;
+  }
+
+  aside {
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 50px
+  }
+
+  #abt, nav {
+    display: none;
+  }
+
+  #social {
+    margin: inherit;
+    padding-top: 6px;
+  }
+
+  main {
+    width: 100%;
+    margin-left: 0;
+    border-left: none;
+    padding: 100px 0px;
+  }
+
+  #grid {
+    width: var(--gridWidth);
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  aside h1 {
+    font-size: 1.0rem;
+    padding-top: 10px;
+  }
+
+  aside .sep {
+    display: none;
+  }
+
+  #social svg {
+    height: 15px;
+    margin-top: 5px;
+  }
+
+  #social li {
+    margin: 0 3px;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div id='wrapper'>
+  <aside>
+
+    <!--TITLE-->
+    <div id='title'>
+      <a href="/"><h1>{Title}</h1></a>
+      <div class="sep"></div>
+    </div>
+
+    <!--FILTER NAVIGATION-->
+    <!--This is where you set your filter navigation.
+      The filter attributes are added in the spreadsheet and they need to match the ones
+      in this navigation.
+
+      You can add several groups to a link: group AND group, group OR group etc. You can
+      read more here: https://isotope.metafizzy.co/filtering.html
+      Adding multiple filters: https://nonspace.tumblr.com/post/166045257594/hi-im-using-your-page-theme-after-image-and-i
+    -->
+<nav>
+ <ul>
+  <li>
+   <a onclick="filterSelection('all')" href="#">
+    All
+   </a>
+  </li>
+  <div class="dropdown">
+   <li>
+    <a class="dropdown-btn" href="#seasons">
+     By Season
+    </a>
+    <div class="dropdown-content" id="seasons">
+     <ul>
+      <li>
+       <a href="#pre-series" onclick="filterSelection('f1')">
+        Pre-Series
+       </a>
+       <div class="subcategory" id="pre-series">
+       </div>
+      </li>
+      <li>
+       <a href="#s1" onclick="filterSelection('f1')">
+        Season 1
+       </a>
+       <div class="subcategory" id="s1">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f74')">
+           Children of the Gods
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f110')">
+           The Broca Divide
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f55')">
+           Solitudes
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <a class="right-menu-btn" href="#s2" onclick="filterSelection('f2')">
+        Season 2
+       </a>
+       <div class="subcategory" id="s2">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f13')">
+           Need
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f22')">
+           The Gamekeeper
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f67')">
+           One False Step
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f108')">
+           The Fifth Race
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f99')">
+           1969
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <a class="right-menu-btn" href="#s3" onclick="filterSelection('f3')">
+        Season 3
+       </a>
+       <div class="subcategory" id="s3">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f94')">
+           Into the Fire
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f111')">
+           Point of View
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f124')">
+           Deadman Switch
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f31')">
+           Urgo
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f70')">
+           Foothold
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f107')">
+           A Hundred Days
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f109')">
+           Shades of Grey
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f21')">
+           Nemesis
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <a class="right-menu-btn" href="#s4" onclick="filterSelection('f4')">
+        Season 4
+       </a>
+       <div class="subcategory" id="s4">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f14')">
+           Window of Opportunity
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f26')">
+           Divide and Conquer
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f28')">
+           Small Victories
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f123')">
+           The Other Side
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f10')">
+           2010
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f23')">
+           The Light
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f24')">
+           Beneath the Surface
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f114')">
+           Tangent
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f82')">
+           Entity
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f102')">
+           Prodigy
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <a href="#s5" onclick="filterSelection('f5')">
+        Season 5
+       </a>
+       <div class="subcategory" id="s5">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f95')">
+           Ascension
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f30')">
+           Meridian
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f83')">
+           Full Circle
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <a class="right-menu-btn" href="#s6" onclick="filterSelection('f6')">
+        Season 6
+       </a>
+       <div class="subcategory" id="s6">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f15')">
+           Allegiance
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f16')">
+           Redemption
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f20')">
+           Descent
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f27')">
+           Frozen
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f68')">
+           Abyss
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f12')">
+           Paradise Lost
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f98')">
+           Metamorphosis
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <a class="right-menu-btn" href="#s7" onclick="filterSelection('f7')">
+        Season 7
+       </a>
+       <div class="subcategory" id="s7">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f76')">
+           Fragile Balance
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f93')">
+           Fallen
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f18')">
+           Death Knell
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f19')">
+           Grace
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f29')">
+           Heroes
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f115')">
+           Death Knell
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f120')">
+           Chimera
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f90')">
+           Lost City
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <a class="right-menu-btn" href="#s8" onclick="filterSelection('f8')">
+        Season 8
+       </a>
+       <div class="subcategory" id="s8">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f11')">
+           Affinity
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f25')">
+           Lockdown
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f104')">
+           Avatar
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f105')">
+           New Order
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f53')">
+           Threads
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f73')">
+           Gemini
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f103')">
+           Moebius
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <a href="#post-s8" onclick="filterSelection('f9')">
+        Post-Season 8
+       </a>
+       <div class="subcategory" id="post-s8">
+        <ul>
+         <li>
+          <a href="#" onclick="filterSelection('f72')">
+           Sam in Atlantis
+          </a>
+         </li>
+         <li>
+          <a href="#" onclick="filterSelection('f61')">
+           post-Atlantis
+          </a>
+         </li>
+        </ul>
+       </div>
+      </li>
+     </ul>
+    </div>
+   </li>
+  </div>
+  <div class="dropdown">
+   <li>
+    <a class="dropdown-btn" href="#categories">
+     By Category
+    </a>
+    <div class="dropdown-content" id="categories">
+     <ul>
+      <li>
+       <a class="right-menu-btn" href="#tropes" id="trope-btn">
+        Cliches
+       </a>
+       <div class="subcategory" id="tropes">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f35')">
+           Accidentally Married
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f117')">
+           Alien Influence
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f47')">
+           Aliens Made Them Do It
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f121')">
+           Closets
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f40')">
+           Fake Dating/Wedding Date
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f66')">
+           Huddle for Warmth
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f88')">
+           Sharing a Bed
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f119')">
+           Stop the Wedding
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f118')">
+           Stranded Off-World
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f89')">
+           escape pod
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f113')">
+           shrunken SG1
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <button class="right-menu-btn" href="#ar" onclick="filterSelection('f75')">
+        Alternate Reality
+       </button>
+       <div class="subcategory" id="ar">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f63')">
+           Doctor Carter AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f34')">
+           Inter-Reality
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f52')">
+           Moebius AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f80')">
+           Sam Marries Pete AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f79')">
+           Tok'ra AU
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <button class="right-menu-btn" href="#au" onclick="filterSelection('f41')">
+        Alternate Universe
+       </button>
+       <div class="subcategory" id="au">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f56')">
+           Apocalypse AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f85')">
+           Changeling AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f84')">
+           College AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f65')">
+           Detectives AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f42')">
+           Hockey AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f64')">
+           Royalty AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f49')">
+           Soulmate AU
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f51')">
+           Teachers AU
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f87')">
+        Amnesia
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f44')">
+        Cabin Fic
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f81')">
+        Canon Divergence
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f38')">
+        Canon-Compliant
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f122')">
+        Catherine Langford
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f43')">
+        Established Relationship
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f96')">
+        First Date
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f60')">
+        Five Times
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f33')">
+        Fix-It
+       </button>
+      </li>
+      <li>
+       <button class="right-menu-btn" href="#holidays" onclick="filterSelection('f86')">
+        Holidays
+       </button>
+       <div class="subcategory" id="holidays">
+        <ul>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f39')">
+           Birthday
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f45')">
+           Christmas
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f100')">
+           Holiday
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f97')">
+           New Years
+          </button>
+         </li>
+         <li>
+          <button class="base-btn" onclick="filterSelection('f46')">
+           Valentines
+          </button>
+         </li>
+        </ul>
+       </div>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f71')">
+        Hurt/Comfort
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f91')">
+        Jacob
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f48')">
+        Kidfic
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f57')">
+        Mini-OTP
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f37')">
+        Offworld Action/Adventure
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f78')">
+        Screw the Regs
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f101')">
+        Stuck Together
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f92')">
+        Telepathy
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f125')">
+        Temporary Death
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f106')">
+        Time Travel
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f116')">
+        crack
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f77')">
+        darkfic
+       </button>
+      </li>
+      <li>
+       <button class="base-btn" onclick="filterSelection('f58')">
+        smut
+       </button>
+      </li>
+     </ul>
+    </div>
+   </li>
+  </div>
+  <li>
+   <br>
+  </li>
+  <li>
+   <a href="/ABOUTPAGE">
+    What Is This?
+   </a>
+  </li>
+ </ul>
+</nav>
+
+
+
+
+
+
+    <!--DESCRIPTION-->
+    <div id="abt">
+      {Description}
+    </div>
+
+    <!--LINKS-->
+    <ul id="social">
+    <!--To add more copy & paste a line. You can find more icons here: https://feathericons.com/-->
+      <li><a href="/"><i data-feather="home"></i></a></li>
+      <li><a href="/askbox"><i data-feather="mail"></i></a></li>
+      <li><a href="/ABOUTPAGE"><i data-feather="user"></i></a></li>
+      <li><a href="/updates"><i data-feather="info"></i></a></li>
+    </ul>
+  </aside>
+  <main>
+    <div id="grid">
+    </div>
+  </main>
+</div>
+
+</body>
+
+
+<!--SCRIPTS-->
+ <!--TEMPLATE
+      If you use this theme without a spreadsheet and have issues with the grid not working replace this script with the one here:
+      https://github.com/nnspce/succulent/blob/master/scripts%20without%20spread
+-->
+<script>
+
+//feather icons
+feather.replace();
+
+//json
+const url = "https://spreadsheets.google.com/feeds/cells/" + spreadsheetID + "/1/public/values?alt=json";
+
+const content = {
+    html: function() {
+        return $.getJSON(url).then(function(data) {
+            //2D array, holding an array for each item
+            const items = [];
+
+            //spread info (used for loops), amount of:
+            const rows = JSON.parse(data.feed.gs$rowCount.$t);
+            const columns = JSON.parse(data.feed.gs$colCount.$t);
+            const cells = rows * columns;
+
+            //spread data
+            const entry = data.feed.entry;
+
+            //character arrays
+            let l = columns;
+            let end = columns * 2; //current row end
+
+            //for every row k
+            for (let k = 0; k < rows; k++) {
+                //create an array
+                items[k] = [];
+
+                //for every column in row k write content of row;
+                //end = amount of columns
+                for (let j = l; j < end; j++) {
+                    if (entry[j] === undefined) {
+                        items[k].push('entry[j].content.$t');
+
+                        l = j; //set current cell number for next loop
+                    } else {
+                        items[k].push(entry[j].content.$t);
+
+                        l = j; //set current cell number for next loop
+                    }
+                }
+
+                //if end of row k
+                if (end === cells) {
+                    break;
+                }
+
+                //else, increment to end & beginning of new row
+                else {
+                    end += columns;
+                    l += 1;
+                }
+            }
+
+            //write data for every row - 1 (title row)
+
+            // ORIGINAL WRITE FROM NONSPACE
+            // const content = [];
+            // for (let m = 0; m < rows - 1; m++) {
+            //     content.push('<div class="card ' + items[m][5] + '"><a href="' + items[m][4] + '"><div class="overlay"></div><img src="' + items[m][3] + '"><div class="overlay-text"><i class="fas fa-hashtag"></i></div></a><div class="box"><h2>' + items[m][0] + '</h2><i>' + items[m][1] + '</i><div class="sep"></div><div class="desc">' + items[m][2] + '</div></div></div>')
+            // }
+
+            const content = [];
+            for (let m = 0; m < rows - 1; m++) {
+                content.push('<div class="card ' + items[m][5] + '"><a href="' + items[m][4] + '"><div class="box"><h2>' + items[m][0] + '</h2><i>' + items[m][1] + '</i><div class="sep"></div><div class="desc">' + items[m][2] + '</div></div></a></div>')
+            }
+
+            return content;
+        });
+    }
+};
+
+content.html().done(function(html) {
+    buildLayout(html);
+});
+
+/* from https://www.w3schools.com/howto/howto_js_dropdown_sidenav.asp */
+//* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}
+
+// $(document).ready(function(){
+//   $('.dropdown-content a.right-menu-btn').on("mouseover", function(e){
+//     $(this).next('ul').toggle();
+//     // e.stopPropagation();
+//     // e.preventDefault();
+//   });
+// });
+filterSelection("all")
+
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("card");
+  if (c == "all") c = "";
+  // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
+}
+
+// Show filtered elements
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {
+      element.className += " " + arr2[i];
+    }
+  }
+}
+
+// Hide elements that are not selected
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
+function buildLayout(content, grid) {
+
+    $('#grid').hide();
+    $('#grid').append(content);
+
+    $('#grid').show();
+
+    //resizeGrid on load
+    resizeGrid();
+}
+
+function resizeGrid() {
+    const winWidth = $('main').innerWidth() - 70;
+    const cardWidth = $('.card').outerWidth() + 30;
+    const colNum = Math.floor(winWidth / cardWidth);
+
+    if (colNum > 1) {
+        $('#grid').css({
+            'width': cardWidth * colNum
+        });
+        $('.card').css({
+            'margin': '15px'
+        });
+    } else {
+        $('#grid').css({
+            'width': cardWidth - 30
+        });
+        $('.card').css({
+            'margin': '15px 0'
+        });
+    }
+}
+
+//resizeGrid on window resize
+(function() { // closure to avoid global variable
+    var timeoutResize;
+    $(window).on('resize', function() {
+        clearTimeout(timeoutResize);
+        timeoutResize = setTimeout(function() {
+            resizeGrid();
+        }, 100);
+    });
+})();
+
+$('body').append(
+  '<div id="nnspc" style="position: fixed; bottom: 0; right: 0; padding: 10px; background: #181818; z-index: 9;"><a style="font-family: helvetica; font-weight: bold; letter-spacing: -1px; color: #fff; text-decoration: none;" href="https://nonspace.tumblr.com">nonspace.</a></div>'
+);
+</script>
+
+</html>
