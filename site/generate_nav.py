@@ -48,7 +48,7 @@ def insert_season_subcategories(seasonNum, legend_local):
             html_data = [row[0], row[1]]
             ep_li.append(html_data)
 
-    ep_li = sorted(ep_li, key=find_in_episode_list(ep_li[1]))
+    ep_li.sort(key=find_in_episode_list(ep_li[1]))
 
     season_div = soup.find(id='s{}'.format(seasonNum))
     season_div.append(soup.new_tag('ul'))

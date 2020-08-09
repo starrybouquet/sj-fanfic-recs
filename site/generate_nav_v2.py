@@ -1,10 +1,13 @@
 from bs4 import BeautifulSoup
+import pandas as pd
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 from datetime import date
 
+episodeList = pd.read_csv('sg1-eps.csv', sep=',', header=None)
+print(episodeList.head())
 
 def get_filters():
     # use creds to create a client to interact with the Google Drive API
@@ -18,6 +21,13 @@ def get_filters():
     legend_local = legend.get_all_values()
 
     return [legend, legend_local]
+
+def find_in_episode_list(episodeData):
+    '''pass'''
+    contains = episodeList.loc[episodeList[1].str.contains(episodeData[1])]
+    if len(contains) > 1:
+        contains = contains.iloc[0]
+    return int(contains[0])
 
 def insert_season_subcategories(seasonNum, legend_local):
     '''Inserts html into soup for subcategories of season (aka episodes) given season number.
@@ -37,26 +47,18 @@ def insert_season_subcategories(seasonNum, legend_local):
     ep_li = []
     for row in legend_local:
         if row[4] == 'ep' and row[3] == 'y' and 's0{}'.format(seasonNum) in row[2]:
-            html_data = []
-            episode = row[2]
-            if episode[5].isdigit():
-                html_data.append(int(episode[4:5]))
-            else:
-                html_data.append(int(episode[4]))
-            html_data.append(row[0])
-            html_data.append(row[1])
+            html_data = [row[0], row[1]]
             ep_li.append(html_data)
 
-    ep_li = sorted(ep_li, key=lambda x: x[0])
+    ep_li.sort(key=find_in_episode_list)
 
     season_div = soup.find(id='s{}'.format(seasonNum))
     season_div.append(soup.new_tag('ul'))
     for li in ep_li:
         wrapper = soup.new_tag('li')
-        link = soup.new_tag('button')
-        link['class'] = 'base-btn'
-        link['onclick'] = "filterSelection('{}')".format(li[1])
-        link.string = li[2]
+        link = soup.new_tag('button', href='#/')
+        link['onclick'] = "filterSelection('{}')".format(li[0])
+        link.string = li[1]
         wrapper.append(link)
         season_div.ul.append(wrapper)
 
@@ -75,11 +77,26 @@ def create_filter_tag(filternum, name, parent):
 def create_dropdown(parent_atrrs_to_find, div_id):
     button = soup.find(attrs=parent_atrrs_to_find)
     button['class'] = 'right-menu-btn'
-    button['href'] = '#{}'.format(div_id)
+    button['href'] = '#{}/'.format(div_id)
     div = soup.new_tag('div', id=div_id)
     div['class'] = 'subcategory'
     button.insert_after(div)
     return div
+
+def insert_types(legend_local):
+    types = []
+    for row in legend_local:
+        if row[4] == 'type' and row[3] == 'y':
+            html_data = [row[0], row[1]]
+            types.append(html_data)
+    types.sort(key=lambda x: x[1])
+
+    type_dropdown = soup.find(id='types')
+    type_dropdown.append(soup.new_tag('ul'))
+
+    # general categories
+    for li in types:
+        create_filter_tag(li[0], li[1], type_dropdown.ul)
 
 def insert_categories(legend_local):
     categories = []
@@ -87,32 +104,41 @@ def insert_categories(legend_local):
     ars = []
     holidays = []
     tropes = []
+    medical = []
+    family = []
     for row in legend_local:
         if row[4]=='category' and row[3]=='y':
+            subcat = row[5]
             html_data = [row[0], row[1]]
-            if 'ar' in row[5]:
+            if 'ar' in subcat:
                 ars.append(html_data)
-            elif 'au' in row[5]:
+            elif 'au' in subcat:
                 aus.append(html_data)
-            elif 'holiday' in row[5]:
+            elif 'holiday' in subcat:
                 holidays.append(html_data)
-            elif 'trope' in row[5]:
+            elif 'trope' in subcat:
                 tropes.append(html_data)
+            elif 'medical' in subcat:
+                medical.append(html_data)
+            elif 'family' in subcat:
+                family.append(html_data)
             else:
                 categories.append(html_data)
 
-    categories = sorted(categories, key=lambda x: x[1])
-    aus = sorted(aus, key=lambda x: x[1])
-    ars = sorted(ars, key=lambda x: x[1])
-    holidays = sorted(holidays, key=lambda x: x[1])
-    tropes = sorted(tropes, key=lambda x: x[1])
+    categories.sort(key=lambda x: x[1])
+    aus.sort(key=lambda x: x[1])
+    ars.sort(key=lambda x: x[1])
+    holidays.sort(key=lambda x: x[1])
+    tropes.sort(key=lambda x: x[1])
+    medical.sort(key=lambda x: x[1])
+    family.sort(key=lambda x: x[1])
 
     category_dropdown = soup.find(id='categories')
     category_dropdown.append(soup.new_tag('ul'))
 
     # tropes
     wrapper = soup.new_tag('li')
-    trope_header = soup.new_tag('a', id='trope-btn')
+    trope_header = soup.new_tag('button', id='trope-btn')
     trope_header.string = 'Cliches'
     wrapper.append(trope_header)
     category_dropdown.ul.append(wrapper)
@@ -120,6 +146,28 @@ def insert_categories(legend_local):
     trope_div.append(soup.new_tag('ul'))
     for li in tropes:
         create_filter_tag(li[0], li[1], trope_div.ul)
+
+    # medical
+    wrapper = soup.new_tag('li')
+    med_header = soup.new_tag('button', id='med-btn')
+    med_header.string = 'Medical'
+    wrapper.append(med_header)
+    category_dropdown.ul.append(wrapper)
+    med_div = create_dropdown({'id': 'med-btn'}, 'medical')
+    med_div.append(soup.new_tag('ul'))
+    for li in medical:
+        create_filter_tag(li[0], li[1], med_div.ul)
+
+    # family
+    wrapper = soup.new_tag('li')
+    fam_header = soup.new_tag('button', id='fam-btn')
+    fam_header.string = 'Family'
+    wrapper.append(fam_header)
+    category_dropdown.ul.append(wrapper)
+    fam_div = create_dropdown({'id': 'fam-btn'}, 'family')
+    fam_div.append(soup.new_tag('ul'))
+    for li in family:
+        create_filter_tag(li[0], li[1], fam_div.ul)
 
     # general categories
     for li in categories:
@@ -161,6 +209,7 @@ for season in range(1,9):
     insert_season_subcategories(season, sheet_legend[1])
 
 insert_categories(sheet_legend[1])
+insert_types(sheet_legend[1])
 
 d = date.today()
 html_out = str(soup)
