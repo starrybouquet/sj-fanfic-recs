@@ -167,8 +167,16 @@ def single_work_from_link(link, reccer):
         numWorksRetrieved = len(seriesworks)
         return numWorksRetrieved, seriesworks
     else:
-        print('{} is an invalid link'.format(link))
-        return 0, None
+        manual = str(input('{} is an invalid link. Do you want to manually enter info? (y or n): '.format(link)))
+        if manual == 'y':
+            title = str(input("Title: "))
+            author = str(input("Author: "))
+            desc = str(input("Summary: "))
+            work = Fic(link, reccer, manualEntry=True, title=title, author=author, desc=desc)
+            numWorksRetrieved = 1
+            return numWorksRetrieved, [work]
+        else:
+            return 0, None
 
 
 def multiple_works_from_links(linkList, reccer, sleeptime=130):
@@ -258,8 +266,9 @@ def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
         recs_object.update('A{0}:J{0}'.format(row_to_add), [[work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()]])
         return 1
 
-def works_from_pickle(filename):
-    works = pickle.load(open(filename, 'rb'))
+def works_from_pickle(filename, loaded=False, works=[]):
+    if not loaded:
+        works = pickle.load(open(filename, 'rb'))
     recs, recs_local = get_recs_spreadsheet()
     first_blank_line = len(recs.col_values(1))+1
     all_links = recs.col_values(4)
@@ -274,8 +283,24 @@ def works_from_pickle(filename):
         print('work added')
         print()
 
+action = str(input('Press l to enter a list of links, or p to enter a pickle file: '))
 filename = str(input('Filename to load: '))
-works_from_pickle(filename)
+
+if action == 'l':
+    reccer = str(input('reccer: '))
+    with open(filename, 'r') as f:
+        linkList = f.readlines()
+    works = multiple_works_from_links(linkList, reccer)
+    pickle.dump(works, open('links_data_{}.p'.format(reccer), 'wb'))
+    print()
+    print("Successfully dumped for safety, now adding to spreadsheet")
+    works_from_pickle('', loaded=True, works=works)
+
+
+elif action == 'p':
+    works_from_pickle(filename)
+else:
+    print("That was not one of the options. I'm gonna quit now.")
 
 
 ### OLD TEST CODE ##
@@ -316,7 +341,7 @@ works_from_pickle(filename)
 #     print(w.get_title())
 
 
-## possible additions:
+### NOTES - possible additions:
 # - get some filters from tags on work
 # - ??
 #

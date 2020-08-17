@@ -4,7 +4,7 @@ from classes import Fic
 from reader import Reader
 import pickle
 
-def get_works_from_bookmarks(username, mine=False):
+def get_works_from_bookmarks(username, mine=False, works_not_bookmarks=False):
     '''
     Returns list of Works, one per bookmark
     '''
@@ -12,6 +12,9 @@ def get_works_from_bookmarks(username, mine=False):
         pw = str(input("Please input password: "))
         session = AO3.Session("starrybouquet", pw)
         bookmarks = session.get_bookmarks()
+    elif works_not_bookmarks:
+        author = AO3.User(username)
+        bookmarks = author.get_works()
     else:
         reader = Reader(username)
         bookmarks = reader.get_bookmarks()
@@ -36,8 +39,8 @@ def get_works_from_bookmarks(username, mine=False):
             print("Work was restricted, skipping. Work id was {}".format(work.workid))
     return bookmarked_works, broken_ids
 
-def write_bookmarks_to_file(username):
-    bookmarks, please_check_these_works = get_works_from_bookmarks(username)
+def write_bookmarks_to_file(username, works_not_bookmarks=False):
+    bookmarks, please_check_these_works = get_works_from_bookmarks(username, works_not_bookmarks=works_not_bookmarks)
     for work in bookmarks:
         print(work.get_title())
     pickle.dump(bookmarks, open('bookmark_data_{}.p'.format(username), 'wb'))
@@ -46,4 +49,8 @@ def write_bookmarks_to_file(username):
     errorlog.close()
 
 usr = str(input('AO3 username: '))
-write_bookmarks_to_file(usr)
+works = str(input('Enter works if you would like works from author instead of bookmarks: '))
+if works == 'works':
+    write_bookmarks_to_file(usr, works_not_bookmarks=True)
+else:
+    write_bookmarks_to_file(usr)

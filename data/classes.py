@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import urllib
 
 import AO3
 import ffnet
@@ -37,7 +38,7 @@ class Link(object):
 class Fic(Link):
     '''works from ao3 or ffn'''
 
-    def __init__(self, raw_link, reccer, existingAO3Work=False, existingFFNStory=False, ffn_users_loaded=[]):
+    def __init__(self, raw_link, reccer, existingAO3Work=False, existingFFNStory=False, ffn_users_loaded=[], manualEntry=False, title='', author='', desc=''):
         super().__init__(raw_link)
         self.reccer = reccer
         self.url = raw_link
@@ -54,8 +55,8 @@ class Fic(Link):
             self.site = 'ffn'
             existingFFNStory.download_data()
             self.url = existingFFNStory.url
-            self.title = existingFFNStory.title
-            self.desc = existingFFNStory.description
+            self.title = self.depercent(existingFFNStory.title)
+            self.desc = self.depercent(existingFFNStory.description)
             author_obj = existingFFNStory.get_user()
             author_obj.download_data()
             self.author = author_obj.username
@@ -63,6 +64,10 @@ class Fic(Link):
                 self.isAdult = True
             else:
                 self.isAdult = False
+        elif manualEntry:
+            self.title = title
+            self.author = author
+            self.desc = desc
         else:
             if self.site == 'ao3':
                 self.id = AO3.utils.workid_from_url(raw_link)
@@ -88,8 +93,8 @@ class Fic(Link):
                 self.id = self.link.partition('/s/')[2].partition('/')[0]
                 me = ffnet.Story(id=self.id)
                 me.download_data()
-                self.title = me.title
-                self.desc = me.description
+                self.title = self.depercent(me.title)
+                self.desc = self.depercent(me.description)
                 self.author = me.author_id
                 if me.rated == 'M':
                     self.isAdult = True
@@ -117,6 +122,9 @@ class Fic(Link):
     def strip_html(self, summary):
         soup = BeautifulSoup(summary, 'html.parser')
         return soup.get_text()
+
+    def depercent(self, string):
+        return urllib.parse.unquote(string)
 
 class Author(Link):
     '''author from ao3 or ffn'''
