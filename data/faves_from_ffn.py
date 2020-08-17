@@ -20,9 +20,11 @@ def get_faves_from_user(user_url, reccer):
 
     return favorite_works
 
-faves = get_faves_from_user('https://www.fanfiction.net/u/12066707/', 'starrybouquet')
+user_url = str(input("FFN user url: "))
+reccer = str(input("reccer (cannot have spaces): "))
+faves = get_faves_from_user(user_url, reccer)
 
 for work in faves:
     print(work.get_title())
 
-pickle.dump(faves, open('ffn_faves_data.p', 'wb'))
+pickle.dump(faves, open('ffn_faves_data_{}.p'.format(reccer), 'wb'))

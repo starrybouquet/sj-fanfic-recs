@@ -258,6 +258,28 @@ def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
         recs_object.update('A{0}:J{0}'.format(row_to_add), [[work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()]])
         return 1
 
+def works_from_pickle(filename):
+    works = pickle.load(open(filename, 'rb'))
+    recs, recs_local = get_recs_spreadsheet()
+    first_blank_line = len(recs.col_values(1))+1
+    all_links = recs.col_values(4)
+    works_added = 1
+    for work in works:
+        if works_added % 80 == 0:
+            print("Have looked at {} works, pausing for 2 min".format(works_added))
+            time.sleep(120)
+        print(work.get_title())
+        first_blank_line += add_work(work, first_blank_line, all_links, recs_local, recs)
+        works_added += 1
+        print('work added')
+        print()
+
+filename = str(input('Filename to load: '))
+works_from_pickle(filename)
+
+
+### OLD TEST CODE ##
+
 
 # work_links = print(get_works('', source='file', filename='samcaarter_reclist.html'))
 #
@@ -280,21 +302,7 @@ def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
 # except RecursionError:
 #     print("Recursion error occurred with depth {}, skipping pickle dump.".format(sys.getrecursionlimit()))
 
-filename = str(input('Please enter Pickle filename (ex. data.p): '))
-works = pickle.load(open(filename, 'rb'))
-recs, recs_local = get_recs_spreadsheet()
-first_blank_line = len(recs.col_values(1))+1
-all_links = recs.col_values(4)
-works_added = 1
-for work in works:
-    if works_added % 80 == 0:
-        print("Have looked at {} works, pausing for 2 min".format(works_added))
-        time.sleep(120)
-    print(work.get_title())
-    first_blank_line += add_work(work, first_blank_line, all_links, recs_local, recs)
-    works_added += 1
-    print('work added')
-    print()
+# filename = str(input('Please enter Pickle filename (ex. data.p): '))
 
 # w = Fic('https://archiveofourown.org/works/17133743', 'starrybouquet')
 # recs, recs_local = get_recs_spreadsheet()

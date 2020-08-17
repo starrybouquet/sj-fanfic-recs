@@ -36,10 +36,14 @@ def get_works_from_bookmarks(username, mine=False):
             print("Work was restricted, skipping. Work id was {}".format(work.workid))
     return bookmarked_works, broken_ids
 
-bookmarks, please_check_these_works = get_works_from_bookmarks('lilianbones')
-for work in bookmarks:
-    print(work.get_title())
-pickle.dump(bookmarks, open('bookmark_data.p', 'wb'))
-errorlog = open('works_with_errors.txt', 'w')
-errorlog.write(str(please_check_these_works))
-errorlog.close()
+def write_bookmarks_to_file(username):
+    bookmarks, please_check_these_works = get_works_from_bookmarks(username)
+    for work in bookmarks:
+        print(work.get_title())
+    pickle.dump(bookmarks, open('bookmark_data_{}.p'.format(username), 'wb'))
+    errorlog = open('works_with_errors.txt', 'w')
+    errorlog.write(str(please_check_these_works))
+    errorlog.close()
+
+usr = str(input('AO3 username: '))
+write_bookmarks_to_file(usr)
