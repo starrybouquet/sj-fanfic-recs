@@ -8,13 +8,14 @@ from firebase_admin import db
 
 ### I/O UTILS ###
 
-def init_tumblr_client():
+def init_tumblr_client(blognum=2):
     # From tumblr API console https://api.tumblr.com/console
     # Authenticate via OAuth
-    with open('tumblr_auth.txt', 'r') as f:
+    with open('tumblr_auth_{0}.txt'.format(blognum), 'r') as f:
         secrets = f.readlines()
     client = pytumblr.TumblrRestClient(secrets[0], secrets[1], secrets[2], secrets[3])
     return client
+
 
 def get_root_firebase():
     cred = credentials.Certificate("firebase_secret.json")
@@ -26,10 +27,10 @@ def get_root_firebase():
     return root
 
 
-### PYTHON UTILS ###
+# # # PYTHON UTILS # # #
 def html_from_url(url):
     '''uses requests to get html in str form (for BeautifulSoup) given a url'''
-    headers = {"User-Agent":"Mozilla/5.0"}
+    headers = {"User-Agent": "Mozilla/5.0"}
     r = requests.get(url, headers=headers)
     return r.text
 
