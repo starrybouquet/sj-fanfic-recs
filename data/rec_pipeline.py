@@ -44,13 +44,15 @@ def split_by_commas(string):
 # all_recs = recs.get_all_values()
 # print(list_of_values)
 
-# From tumblr API console https://api.tumblr.com/console
-# Authenticate via OAuth
-client = pytumblr.TumblrRestClient(
-  'yIn5BsgXKPGlR4OoHsFV6jT4KC0PeJQ3cGe0mQvSGbT8QGA95k',
-  'qbET4dR9xMAntDJTwemIlZucJkpucS2Tm0CZlRdq6yOpvdbozt',
-  'JtfABFskd8FpPmptIbNnUJdaaZICuoJHafcGy4YAi8luiBRzRX',
-  'vtVGOENMCaforhI1kUniUlDYjWCASI2eiKzOhlBkuIheQPPpOw')
+def get_tumblr_client():
+    # From tumblr API console https://api.tumblr.com/console
+    # Authenticate via OAuth
+    with open('tumblr_secret.p', 'rb') as f:
+        secrets = pickle.load(f)
+    client = pytumblr.TumblrRestClient(secrets[0], secrets[1], secrets[2], secrets[3])
+    return client
+
+client = get_tumblr_client()
 
 ## post url options
 # https://starrybouquet.tumblr.com/post/620329944196710401/heya-any-suggestions-for-good-affinity-fix-it
