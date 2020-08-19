@@ -8,11 +8,26 @@ from firebase_admin import db
 
 ### I/O UTILS ###
 
-def init_tumblr_client(blognum=2):
+def init_tumblr_client(blognum=1):
+    '''Short summary.
+
+    Parameters
+    ----------
+    blognum : int
+        1: sjficlist-dev.tumblr.com
+        2: sjficlist-dev-2.tumblr.com
+        3. idk? check if you want...
+
+    Returns
+    -------
+    type
+        Description of returned object.
+
+    '''
     # From tumblr API console https://api.tumblr.com/console
     # Authenticate via OAuth
     with open('tumblr_auth_{0}.txt'.format(blognum), 'r') as f:
-        secrets = f.readlines()
+        secrets = [secret.strip('\n') for secret in f.readlines()]
     client = pytumblr.TumblrRestClient(secrets[0], secrets[1], secrets[2], secrets[3])
     return client
 

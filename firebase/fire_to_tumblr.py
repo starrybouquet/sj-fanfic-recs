@@ -42,23 +42,18 @@ def post_fic(fic_data, id, client, state="published"):
     print('Created post. Body html below:')
     print(post_body)
 
-    client.create_text('sjficlist-dev-2.tumblr.com',
+    client.create_text('sjficlist-dev.tumblr.com',
                        state=state, slug=slug, body=post_body, format='html', tags=tags)
 
     return slug
 
 
 client = init_tumblr_client(blognum=1)
-print(client.info())
-print(client.posts('starrybouquet.tumblr.com'))
-print()
-print(client.posts('sjficlist.tumblr.com'))
-
 # so apparently the issue is that it's a sideblog. eeeeee
-# root = get_root_firebase()
-# key, fic = find_fic_in_firebase('Thoughts', 'starrybouquet')
-# print()
-# print(fic)
-# post = input('post fic? y to continue: ')
-# if post == 'y':
-#     post_fic(fic, key, client)
+root = get_root_firebase()
+key, fic = find_fic_in_firebase('Thoughts', 'starrybouquet')
+print()
+print(fic)
+post = input('post fic? y to continue: ')
+if post == 'y':
+    post_fic(fic, key, client)

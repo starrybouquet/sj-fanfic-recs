@@ -3,11 +3,9 @@
 # Also trying to extract a header image given a blog name.
 import time
 import pickle
-import sys
 
 import pytumblr
 import AO3
-import ffnet
 
 from bs4 import BeautifulSoup
 import requests
@@ -18,9 +16,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from classes import Fic, Author
 
 sites = {'ao3': 'archiveofourown.org',
-            'ffn': 'fanfiction.net'}
-
-
+         'ffn': 'fanfiction.net'}
 
 # def update_local_copies():
 #     global recs_local = recs.get_all_values()
@@ -29,9 +25,10 @@ sites = {'ao3': 'archiveofourown.org',
 #     global converted_legend = convert_legend_to_multiple_tags(legend_local)
 #     global first_blank_legend_line = legend.col_values(1).index('')+1
 
+
 def html_from_url(url):
     '''uses requests to get html in str form (for BeautifulSoup) given a url'''
-    headers = {"User-Agent":"Mozilla/5.0"}
+    headers = {"User-Agent": "Mozilla/5.0"}
     r = requests.get(url, headers=headers)
     return r.text
 
@@ -44,6 +41,7 @@ def split_by_commas(string):
 # all_recs = recs.get_all_values()
 # print(list_of_values)
 
+
 def get_tumblr_client():
     # From tumblr API console https://api.tumblr.com/console
     # Authenticate via OAuth
@@ -52,9 +50,12 @@ def get_tumblr_client():
     client = pytumblr.TumblrRestClient(secrets[0], secrets[1], secrets[2], secrets[3])
     return client
 
-client = get_tumblr_client()
 
-## post url options
+client = get_tumblr_client()  # THIS DOES NOT WORK. PLEASE FIX IT TO LOOK LIKE THE TUMBLR CLIENT UTIL IN FIREBASE DIR
+print(client.info())
+print()
+
+# # post url options
 # https://starrybouquet.tumblr.com/post/620329944196710401/heya-any-suggestions-for-good-affinity-fix-it
 # https://samcaarter.tumblr.com/private/621914267347795968/tumblr_qchqnjlukx1r9gqxq
 # https://professortennant.tumblr.com/post/175193322905/samjack-rec-list-pt-1
@@ -82,6 +83,7 @@ def strip_redirect_link(url):
         print("Link could not be stripped. Returning url given.")
         return url
 
+
 def get_works(post_url, source='tumblr', filename=''):
     '''get works from tumblr url with links
     options for source: tumblr, file, url'''
@@ -95,7 +97,7 @@ def get_works(post_url, source='tumblr', filename=''):
         post_username = post_url_split[0].partition("https://")[2]
         post_id = post_url_split[2].partition("/")[0]
 
-        print("Parsing post from {}".format(post_username)) # check it worked
+        print("Parsing post from {}".format(post_username))  # check it worked
 
         post = client.posts(post_username, id=post_id)['posts'][0]
         content = post['trail'][0]['content'].split('<')
@@ -140,6 +142,7 @@ def get_works(post_url, source='tumblr', filename=''):
 
         return all_links
 
+
 def single_work_from_link(link, reccer):
     '''Get single work from link given.
 
@@ -182,7 +185,7 @@ def single_work_from_link(link, reccer):
 
 
 def multiple_works_from_links(linkList, reccer, sleeptime=130):
-    authors = []
+    # authors = []
     works = []
     worksSinceSleep = 0
     for link in linkList:
@@ -199,6 +202,7 @@ def multiple_works_from_links(linkList, reccer, sleeptime=130):
 
     return works
 
+
 def get_works_from_series(seriesid, reccer):
     '''get list of works of my Work class given an ao3 series id'''
     series = AO3.Series(seriesid)
@@ -207,6 +211,7 @@ def get_works_from_series(seriesid, reccer):
         work.reload()
         seriesparts.append(Fic(work.url, reccer, existingAO3Work=work))
     return seriesparts
+
 
 def get_recs_spreadsheet():
     '''Get recs spreadsheets from Google
@@ -230,6 +235,7 @@ def get_recs_spreadsheet():
     recs_local = recs.get_all_values()
 
     return recs, recs_local
+
 
 def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
     '''Add work to fic entry part of spreadsheet. Checks the gsheet and add to recs if it's not there.
@@ -256,7 +262,7 @@ def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
     '''
 
     # use link to figure out if it's already there
-    if work.get_url() in linkList: #probably need to check that links are consistent
+    if work.get_url() in linkList:  # probably need to check that links are consistent
         workrow = linkList.index(work.get_url())
         reccers = recs_sheet[workrow][9]
         if work.get_reccer() not in reccers:
@@ -264,8 +270,11 @@ def add_work(work, row_to_add, linkList, recs_sheet, recs_object):
             recs_object.update_cell(workrow+1, 10, newvalue)
         return 0
 
-    else: # need to add fic
-        recs_object.update('A{0}:J{0}'.format(row_to_add), [[work.get_title(), work.get_author(), work.get_desc(), work.get_url(), '', '', '', '', work.get_site(), work.get_reccer()]])
+    else:  # need to add fic
+        recs_object.update('A{0}:J{0}'.format(row_to_add), [[work.get_title(), work.get_author(),
+                                                             work.get_desc(), work.get_url(),
+                                                             '', '', '', '',
+                                                             work.get_site(), work.get_reccer()]])
         return 1
 
 def works_from_pickle(filename, loaded=False, works=[]):
@@ -285,6 +294,7 @@ def works_from_pickle(filename, loaded=False, works=[]):
         print('work added')
         print()
 
+
 action = str(input('Press l to enter a list of links, or p to enter a pickle file: '))
 filename = str(input('Filename to load: '))
 
@@ -301,11 +311,16 @@ if action == 'l':
 
 elif action == 'p':
     works_from_pickle(filename)
+
+elif action == 'w':
+    url = str(input('Please enter url of post: '))
+    links = get_works(url)
+    print(links)
 else:
     print("That was not one of the options. I'm gonna quit now.")
 
 
-### OLD TEST CODE ##
+# ## OLD TEST CODE ##
 
 
 # work_links = print(get_works('', source='file', filename='samcaarter_reclist.html'))
