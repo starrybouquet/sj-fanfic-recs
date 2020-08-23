@@ -1,7 +1,5 @@
 import time
 
-from firebase import db
-
 from my_utils import get_spreadsheets, get_root_firebase, split_by_commas
 
 
@@ -52,16 +50,56 @@ def create_filter_item(filter_data_row):
                    'title': filter_data_row[1],
                    'type': filter_data_row[4],
                    'submenu': filter_data_row[5],
-                   'subtags': filter_data_row[2]}
+                   'subtag_ids': filter_data_row[2]}
 
     return filter_dict
 
 
-def push_to_firebase(section_name, dict):
-    pass
+def push_to_firebase(root, section_name, data_dict):
+    '''Push dict to firebase given section and firebase root
+
+    Parameters
+    ----------
+    root : firebase db
+    section_name : str
+        name of section in database. 'fics' or 'filters'
+    data_dict : dict
+        Dict of data to insert
+
+    Returns
+    -------
+    firebase entry
+        Returns new entry as a firebase object
+
+    '''
+
+    json_dict = {}
+    for key, value in data_dict:
+        if type(value) != "str":
+            json_dict[key] = str(value)
+        else:
+            json_dict[key] = value
+
+    section = root.equal_to(section_name).get()
+
+    new_entry = section.push(json_dict)
+
+    return new_entry
 
 
+root = get_root_firebase()
 [recs, legend, recs_local, legend_local, converted_legend] = get_spreadsheets()
+counter = 0
 for row in legend_local:
     filter_dict = create_filter_item(row)
-    push_to_firebase('filters', filter_dict)
+    push_to_firebase(root, 'filters', filter_dict)
+    counter += 1
+    print('Have added {} filter rows.'.format(counter))
+print()
+counter = 0
+for i in range(len(recs_local)):
+    fic_data = get_fic_dict(recs_local[i], legend_local, i+1)
+    push_to_firebase(root, 'fics', fic_data)
+    counter += 1
+    print('Have added {} fics.'.format(counter))
+print()

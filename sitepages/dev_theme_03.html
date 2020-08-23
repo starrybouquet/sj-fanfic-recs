@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link href='https://static.tumblr.com/vr8wztv/KHzpnokhf/cssreset.css' rel='stylesheet' type='text/css'>
+<link href="https://static.tumblr.com/0podkko/xIbplezmo/modified_photosets.css" rel="stylesheet">
+<link href="https://dl.dropbox.com/s/jcxqhaqnox8ku5w/mykola-v1.css" rel="stylesheet">
+<link rel="shortcut icon" href="{Favicon}">
+<link href="https://fonts.googleapis.com/css?family={select:body font}:300,300i,400,400i,700,700i|Roboto Mono:300,700|IBM Plex Mono:400,700" rel="stylesheet">
+
+
+    <!--
+    ===============================================
+
+
+        Mykola Theme
+        more @ https://spielglocken.tumblr.com
+
+        Do not alter or remove credit
+
+
+    ===============================================
+    -->
+
+
+<title>{block:PostSummary}{PostSummary} &mdash; {/block:PostSummary}{block:TagPage}{lang:Posts tagged Tag} &mdash; {/block:TagPage}{block:SearchPage}{lang:Search results for SearchQuery} &mdash; {/block:SearchPage}{Title}</title>
+{block:Description}
+<meta name="description" content="{MetaDescription}" />
+{/block:Description}
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+{block:Hidden}
+<meta name="select:body font" content="PT Sans" />
+<meta name="select:body font" content="Fira Sans" />
+<meta name="select:body font" content="IBM Plex Sans" />
+<meta name="select:body font" content="Merriweather Sans" />
+<meta name="select:body font" content="Open Sans" />
+<meta name="select:body font" content="Roboto" />
+<meta name="select:body font" content="Roboto Slab" />
+<meta name="select:body font" content="Rubik" />
+<meta name="select:body font" content="Source Sans Pro" />
+<meta name="select:body font" content="Ubuntu" />
+
+<meta name="select:sidebar width" content="190px" />
+<meta name="select:sidebar width" content="210px" />
+<meta name="select:sidebar width" content="230px" />
+<meta name="select:sidebar width" content="250px" />
+
+<meta name="select:sidebar position" content="left" />
+<meta name="select:sidebar position" content="right" />
+
+<meta name="select:sidebar links style" content="list" />
+<meta name="select:sidebar links style" content="grid" />
+
+<meta name="select:post width" content="400px" />
+<meta name="select:post width" content="350px" />
+<meta name="select:post width" content="450px" />
+<meta name="select:post width" content="500px" />
+<meta name="select:post width" content="550px" />
+
+<meta name="select:post captions" content="display" />
+<meta name="select:post captions" content="hidden" />
+
+<meta name="select:post tags" content="display" />
+<meta name="select:post tags" content="hidden" />
+
+<meta name="color:background" content="#f1f1f4" />
+<meta name="color:post background" content="#ffffff" />
+<meta name="color:post borders" content="#c7c8d0" />
+<meta name="color:text" content="#333333" />
+<meta name="color:accent" content="#85878d" />
+<meta name="color:liked like buttons" content="#ff6347" />
+<meta name="color:dark mode accent" content="#ace0ef" />
+
+<meta name="text:link 1" content="Lorem ipsum" />
+<meta name="text:link 1 url" content="http://" />
+<meta name="text:link 2" content="Dolorem sit" />
+<meta name="text:link 2 url" content="http://" />
+<meta name="text:link 3" content="Adipiscing vivus" />
+<meta name="text:link 3 url" content="http://" />
+
+<meta name="text:night mode hours" content="22-8" />
+
+<meta name="if:enable rounded corners" content="1" />
+<meta name="if:enable post borders" content="1" />
+<meta name="if:enable box shadows" content="0" />
+<meta name="if:enable search bar" content="1" />
+<meta name="if:enable night mode" content="1" />
+<meta name="if:display avatar" content="1" />
+{/block:Hidden}
+
+
+<style type="text/css">
+
+::selection {background-color:{color:accent}; color:{color:post background}; text-shadow:none;}
+
+body {font-family:'{select:body font}','Helvetica','Arial',sans-serif; color:{color:text}; background-color:{color:background};}
+
+::-webkit-scrollbar-thumb {background:{color:accent}; border:1px {color:background} solid; border-radius:10px;}
+
+/* links */
+
+a, span.tag, .search_query, .cb-author.deac span {color:{color:accent};}
+.entry a:not(.like-btn):not(.rb-btn):not(.link-container), span.tag, .search_query, .cb-author.deac span, .pagination a {text-shadow:.08em 0 0 {color:post background}, 0 0, -.08em 0 0 {color:post background}; background-image:linear-gradient(90deg, rgba({RGBcolor:accent},.5) 0%, rgba({RGBcolor:accent},.5) 100%);}
+
+.entry a:not(.like-btn):not(.rb-btn):not(.link-container) {text-shadow: .08em 0 0 {color:post background}, 0 0, -.08em 0 0 {color:post background};}
+a:hover {color:{color:text};}
+
+/* sidebar */
+
+aside .a-wrap, aside nav, aside .blog-search, .avatar img, .entry:not(.pagination):not(.page-marker) {background:{color:post background};}
+.blog-search svg, nav svg, .a-wrap svg {stroke:{color:accent};}
+.blog-search input[type=text] {background:{color:background};}
+.blog-search input[type=text]:before {content:'{lang:Search}';}
+
+/* borders */
+
+.has-border .entry:not(.page-marker),
+.has-border aside .a-wrap, .has-border aside nav, .has-border aside .blog-search, .has-border aside.ava-display .avatar img, .has-border aside .blog-search input[type=text], .sender img {border:1px {color:post borders} solid;}
+
+/* posts */
+
+.text-container blockquote, .link-container, .cc-line:nth-of-type(odd),
+.message.q:not(.re), .ac-classic,
+code, pre {
+    background:rgba({RGBcolor:accent},.1);
+}
+
+.link-container {
+    color:{color:accent};
+}
+.link-container:hover {
+    color:{color:text};
+    background:rgba({RGBcolor:accent},.2);
+}
+
+.acc-player, .ac-embed {
+    color:{color:accent};
+}
+
+.dark .acc-player, .ac-embed {
+    color:{color:dark mode accent};
+}
+
+.cb-author.deac span {
+    background-image:linear-gradient(90deg, {color:accent} 0%, {color:accent} 100%);
+    background-position:100% calc(50% + .08em);
+    text-shadow:none;
+}
+
+ul li:before, .cb-author:before {
+    background:{color:accent};
+}
+
+.page-marker span, .pagination a {text-shadow:0.08em 0 0 {color:background}, 0 0, -0.08em 0 0 {color:background};}
+blockquote {border-left:1px {color:accent} solid;}
+.text-container blockquote {border-left: 3px rgba({RGBcolor:accent},.5) solid;}
+hr {background:{color:accent}; box-shadow:-1rem 0 0 {color:accent}, 1rem 0 0 {color:accent};}
+.tmblr-lightbox {background-color:rgba({RGBcolor:accent},.95)!important;}
+
+
+@media (min-width:0px) and (max-width:1024px){
+    header, aside {background:{color:post background};}
+    header img {background:{color:post background};}
+    aside .blog-search input[type=submit] {color:#fff; background:{color:accent};}
+
+    /* post borders */
+
+    .has-border header {border-bottom:1px {color:post borders} solid;}
+    .has-border aside {border-right:1px {color:post borders} solid;}
+    .has-border header img {border:1px {color:post borders} solid;}
+}
+
+@media (min-width:1025px) {
+    nav .page-wrap {scrollbar-color: rgba({RGBcolor:accent},.2) {color:post background}; background:{color:post background};}
+    nav .page-wrap::-webkit-scrollbar-thumb {background:rgba({RGBcolor:accent},.5); border-color:{color:post background};}
+}
+
+/* night mode
+
+    -------------------------------------
+     colors used:
+
+     <body> background:          #37373a
+     post/sidebar background:    #303033
+     post/sidebar borders:       #46464c
+     body text:                  #f1f2f3
+    -------------------------------------
+
+*/
+
+body.dark, .dark aside .blog-search input[type=text] {background:#37373a; color:#f1f2f3;}
+.dark aside .a-wrap, .dark aside .blog-search, .dark aside nav, .dark .entry:not(.pagination):not(.page-marker), .dark .avatar img {background:#303033;}
+.dark ul li:before, .dark .cb-author:before {background:{color:dark mode accent};}
+.dark .blog-search svg, .dark nav svg, .dark .a-wrap svg {stroke:{color:dark mode accent};}
+
+body.dark ::selection {background-color:{color:dark mode accent}; color:#303033; text-shadow:none;}
+
+/* links */
+
+.dark a, .dark span.tag, .dark .search_query, .dark .cb-author.deac span {color:{color:dark mode accent};}
+.dark .entry a:not(.like-btn):not(.rb-btn):not(.link-container), .dark span.tag, .dark .search_query, .dark .cb-author.deac span, .dark .pagination a {text-shadow:.08em 0 0 #303033, -.08em 0 0 #303033; background-image:linear-gradient(90deg, rgba({RGBcolor:dark mode accent},.5) 0%, rgba({RGBcolor:dark mode accent},.5) 100%);}
+.dark a:hover, .dark .link-container:hover {color:#f1f2f3;}
+
+.dark .cc-line:nth-of-type(odd), .dark .link-container, .dark .message.q:not(.re), .dark .ac-classic, .dark .text-container blockquote {background:rgba({RGBcolor:dark mode accent},.1);}
+.dark .link-container:hover {background:rgba({RGBcolor:dark mode accent},.2);}
+
+.dark .cb-author.deac span {background-image:linear-gradient(90deg, {color:dark mode accent} 0%, {color:dark mode accent} 100%); text-shadow:none;}
+
+/* pagination */
+
+.dark .page-marker span, .dark .pagination a {cursor:default; text-shadow:0.08em 0 0 #37373a, 0 0, -0.08em 0 0 #37373a;}
+
+/* text formatting */
+
+.dark .text-container blockquote {border-left-color:rgba({RGBcolor:dark mode accent},.5);}
+.dark hr {background:{color:dark mode accent}; box-shadow:-1rem 0 0 {color:dark mode accent}, 1rem 0 0 {color:dark mode accent};}
+
+/* lightbox */
+
+.dark .tmblr-lightbox {background-color:rgba({RGBcolor:dark mode accent},.95)!important;}
+
+/* scrollbar */
+
+.dark::-webkit-scrollbar-thumb {background:rgba({RGBcolor:dark mode accent},.5); border:2px #37373a solid; border-radius:10px;}
+
+/* post borders */
+
+.dark .has-border .entry:not(.page-marker),
+.dark .has-border aside .a-wrap, .dark .has-border aside nav, .dark .has-border aside .blog-search, .dark .has-border aside .avatar img, .dark .has-border aside .blog-search input[type=text] {border:1px solid #46464c;}
+.dark .sender img {border:1px {color:dark mode accent} solid;}
+
+@media (min-width:0px) and (max-width:1024px){
+    .dark header, .dark header img, .dark aside {background:#303033; border-color:#47474c;}
+    .dark aside .blog-search input[type=submit] {background:{color:dark mode accent}; color:#37373a;}
+    .dark .has-box-shadow aside {box-shadow:3px 0 5px rgba(0,0,0,.1);}
+}
+@media (min-width:1025px){
+    .dark nav .page-wrap {scrollbar-color:rgba({RGBcolor:dark mode accent},.2) #2e2e33; background:#303033;}
+    .dark .has-box-shadow nav .page-wrap::-webkit-scrollbar-thumb {border-color:#303033;}
+
+    /* box shadows */
+
+    .dark .has-box-shadow aside .a-wrap, .dark .has-box-shadow aside nav, .dark .has-box-shadow aside .blog-search, .dark .has-box-shadow aside .avatar img {box-shadow:0 0 10px rgba(0,0,0,.1);}
+}
+
+{CustomCSS}
+
+</style>
+<noscript><style>body {opacity:1;}</style></noscript>
+</head>
+<body id="target"{block:ifEnableNightMode} class="enable-nm"{/block:ifEnableNightMode}>
+<main class="{select:sidebar position} pw{select:post width} sw{select:sidebar width}{block:PermalinkPage} is-perma{/block:PermalinkPage}{block:IndexPage} is-index{/block:IndexPage}{block:ifEnablePostBorders} has-{/block:ifEnablePostBorders}{block:ifNotEnablePostBorders} no-{/block:ifNotEnablePostBorders}border{block:ifEnableRoundedCorners} rounded{/block:ifEnableRoundedCorners}{block:ifEnableBoxShadows} has-box-shadow{/block:ifEnableBoxShadows}">
+    <header class="cap font bold">
+        <div class="h-wrap">
+            {block:ifDisplayAvatar}<a href="/"><img src="{PortraitURL-128}"/></a>{/block:ifDisplayAvatar}
+            <a class="blog-title" href="/">{BlogTitle}</a>
+            <a class="m-toggle" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </a>
+        </div>
+    </header>
+    <aside class="{block:ifDisplayAvatar}ava-display{/block:ifDisplayAvatar}{block:ifNotDisplayAvatar}ava-hide{/block:ifNotDisplayAvatar}{block:HasPages} has-pages{/block:HasPages}">
+        <div class="a-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        {block:ifDisplayAvatar}
+        <div class="avatar"><a href="/"><img src="{PortraitURL-128}" /></a></div>
+        {/block:ifDisplayAvatar}
+        <div class="blog-title bold font cap"><a href="/">{BlogTitle}</a></div>
+        {block:Description}
+        <div class="blog-description">{Description}</div>
+        {/block:Description}
+        </div>
+        <nav class="font {select:sidebar links style}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <div>
+            <a href="/">{lang:Home}</a>
+            {block:AskEnabled}<a href="/ask">{AskLabel}</a>{/block:AskEnabled}
+            <a href="/archive">{lang:Archive}</a>
+            {block:ifLink1}<a href="{text:link 1 url}">{text:link 1}</a>{/block:ifLink1}
+            {block:ifLink2}<a href="{text:link 2 url}">{text:link 2}</a>{/block:ifLink2}
+            {block:ifLink3}<a href="{text:link 3 url}">{text:link 3}</a>{/block:ifLink3}
+            </div>
+            {block:HasPages}
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pw-toggle"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <div class="page-wrap">
+            {block:Pages}<a href="{URL}">{Label}</a>{/block:Pages}
+            </div>
+            {/block:HasPages}
+        </nav>
+        </div>
+        {block:ifEnableSearchBar}
+        <div class="blog-search">
+            <form action="/search" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" name="q" value="{SearchQuery}" placeholder="{lang:Search}" />
+                <input type="submit" value="{lang:Search}" />
+            </form>
+        </div>
+        {/block:ifEnableSearchBar}
+    </aside>
+    <section class="holder">
+        {block:TagPage}
+        <article class="entry page-marker font">
+            {lang:Showing posts tagged Tag 2}
+        </article>
+        {/block:TagPage}
+        {block:SearchPage}
+        <article class="entry page-marker font">
+            {lang:Showing SearchResultCount results for SearchQuery 2}
+            {block:NoSearchResults}{lang:No search results for SearchQuery 2}{/block:NoSearchResults}
+        </article>
+        {/block:SearchPage}
+        {block:Posts}
+        <article class="entry">
+            {block:Date}
+            <div class="entry-info top padded all {block:ifNotEnablePostBorders}p {/block:ifNotEnablePostBorders} cap font">
+                {block:IndexPage}<a class="to-permalink bold" href="{Permalink}">{/block:IndexPage}{block:PermalinkPage}<span class="bold">{/block:PermalinkPage}{DayofWeek}, {DayofMonth} {Month} {Year}{/block:IndexPage}</a>{/block:IndexPage}{block:PermalinkPage}</span>{/block:PermalinkPage}
+            </div>
+            {/block:Date}
+            <div class="entry-content caption-{select:post captions} tags-{select:post tags}">
+                {block:Text}
+                {block:Title}<h1 class="entry-title padded all">{Title}</h1>{/block:Title}
+                {block:NotReblog}
+                <div class="text-container padded {block:ifEnablePostBorders}all{/block:ifEnablePostBorders}{block:ifNotEnablePostBorders}sides{/block:ifNotEnablePostBorders}">{Body}</div>
+                {/block:NotReblog}
+                <div class="text-container">
+                {block:RebloggedFrom}
+                    <div class="reblog-container">
+                        {block:Reblogs}
+                        <div class="padded all caption-block">
+                            <div class="cb-author{block:isDeactivated} deac{/block:isDeactivated}">
+                                {block:isActive}<a href="{Permalink}" class="cba-link">{Username}</a>{/block:isActive}
+                                {block:isDeactivated}<span>{Username}</span>{/block:isDeactivated}
+                            </div>
+                            {Body}
+                        </div>
+                        {/block:Reblogs}
+                    </div>
+                {/block:RebloggedFrom}
+                </div>
+                {/block:Text}
+                {block:Photo}
+                <div class="photo-container">
+                    <div class="photoset-grid"><div class="photo" data-width="{PhotoWidth-HighRes}" data-height="{PhotoHeight-HighRes}" data-lowres="{PhotoURL-500}" data-highres="{PhotoURL-HighRes}" onclick="lightbox(this)"><img src="{PhotoURL-HighRes}" /></div></div>
+                </div>
+                {/block:Photo}
+                {block:Photoset}
+                <div class="photo-container ps">
+                    <div class="photoset-grid" photoset-layout="{PhotosetLayout}">{block:Photos}<div data-width="{PhotoWidth-HighRes}" data-height="{PhotoHeight-HighRes}" data-lowres="{PhotoURL-500}" data-highres="{PhotoURL-HighRes}" onclick="lightbox(this)"><img src="{PhotoURL-HighRes}" /></div>{/block:Photos}</div>
+                </div>
+                {/block:Photoset}
+                {block:Link}
+                <a href="{URL}" target="_blank" class="padded all p link-container">
+                    <h1>{Name}</h1>
+                    <div class="lc-data">
+                        {block:Author}<span class="author">{Author}</span>{/block:Author}
+                        <span class="divider"></span>
+                        {block:Host}<span class="host">{Host}</span>{/block:Host}
+                    </div>
+                    {block:Excerpt}
+                    <div class="lc-excerpt">{Excerpt}</div>
+                    {/block:Excerpt}
+                </a>
+                {block:Description}
+                {block:NotReblog}
+                <div class="padded all caption-block link-description">
+                    {Description}
+                </div>
+                {/block:NotReblog}
+                {block:RebloggedFrom}
+                <div class="reblog-container">
+                {block:Reblogs}
+                    <div class="padded all caption-block link-description">
+                        <div class="cb-author{block:isDeactivated} deac{/block:isDeactivated}">
+                            {block:isActive}<a href="{Permalink}" class="cba-link">{Username}</a>{/block:isActive}
+                            {block:isDeactivated}<span>{Username}</span>{/block:isDeactivated}
+                            </div>
+                            {Body}
+                    </div>
+                {/block:Reblogs}
+                </div>
+                {/block:RebloggedFrom}
+                {/block:Description}
+                {/block:Link}
+                {block:Chat}
+                {block:Title}<h1 class="entry-title padded all">{Title}</h1>{/block:Title}
+                <div class="chat-container font">
+                    {block:Lines}
+                    <div class="cc-line padded all p">
+                        {block:Label}<span class="bold">{Label}</span>{/block:Label}
+                        {Line}
+                    </div>
+                    {/block:Lines}
+                </div>
+                {/block:Chat}
+                {block:Audio}
+                <div class="audio-container">
+                    {block:AudioPlayer}
+                    <div class="ac-classic padded all p">
+                        <div class="acc-data">
+                            {block:TrackName}<div class="accd-track has-ellipsis">{TrackName}</div>{/block:TrackName}
+                            {block:Artist}<div class="accd-artist has-ellipsis">{Artist}</div>{/block:Artist}
+                            {block:Album}<div class="accd-album it has-ellipsis">{Album}</div>{/block:Album}
+                        </div>
+                        <div class="acc-player">{AudioPlayer}</div>
+                    </div>
+                    {/block:AudioPlayer}
+                    {block:AudioEmbed}
+                    <div class="ac-embed">{AudioEmbed}</div>{/block:AudioEmbed}
+                </div>
+                {/block:Audio}
+                {block:Answer}
+                <div class="message q padded all p">
+                    {Question}
+                    <div class="sender lo bold">
+                    <img src="{AskerPortraitURL-40}"/> {Asker}
+                    </div>
+                </div>
+                {block:NotReblog}
+                <div class="message a padded all">
+                    <div class="sender lo bold">
+                    <img src="{PortraitURL-40}"/> {Name}
+                    </div>
+                    {Answer}
+                </div>
+                {/block:NotReblog}
+                {block:RebloggedFrom}
+                {block:Answerer}
+                <div class="message q re padded all">
+                    <div class="sender lo bold"><img src="{AnswererPortraitURL-40}"/> {Answerer}</div>
+                    {Answer}
+                </div>
+                {/block:Answerer}
+                {block:Reblogs}
+                <div class="reblog-container">
+                    <div class="padded all caption-block">
+                        <div class="cb-author{block:isDeactivated} deac{/block:isDeactivated}">
+                            {block:isActive}<a href="{Permalink}" class="cba-link">{Username}</a>{/block:isActive}
+                            {block:isDeactivated}<span>{Username}</span>{/block:isDeactivated}
+                            </div>
+                            {Body}
+                    </div>
+                </div>
+                {/block:Reblogs}
+                {/block:RebloggedFrom}
+                {/block:Answer}
+                {block:Quote}
+                <div class="quote-container padded sides">
+                    <div class="quote {Length}">{Quote}</div>
+                    {block:Source}
+                    <div class="quote-source">{Source}</div>
+                    {/block:Source}
+                </div>
+                {/block:Quote}
+                {block:Video}
+                <div class="video-container">{Video-500}</div>
+                {/block:Video}
+                {block:Caption}
+                <div class="entry-caption {select:post captions}">
+                {block:NotReblog}
+                    <div class="padded all caption-block">
+                        <div class="cb-author">
+                            <a href="{Permalink}" class="cba-link">{Name}</a>
+                        </div>
+                        {Caption}
+                    </div>
+                {/block:NotReblog}
+                {block:RebloggedFrom}
+                    <div class="reblog-container">
+                        {block:Reblogs}
+                        <div class="padded all caption-block">
+                            <div class="cb-author{block:isDeactivated} deac{/block:isDeactivated}">
+                                {block:isActive}<a href="{Permalink}" class="cba-link">{Username}</a>{/block:isActive}
+                                {block:isDeactivated}<span>{Username}</span>{/block:isDeactivated}
+                            </div>
+                            {Body}
+                        </div>
+                        {/block:Reblogs}
+                    </div>
+                {/block:RebloggedFrom}
+                </div>
+                {/block:Caption}
+            </div>
+            {block:IndexPage}
+            {block:HasTags}
+            <div class="entry-tags padded sides {select:post tags}">
+                {block:Tags}
+                #<a href="{TagURL}">{Tag}</a>&nbsp;
+                {/block:Tags}
+            </div>
+            {/block:HasTags}
+            {/block:IndexPage}
+            {block:Date}
+            <div class="entry-info bot font padded {block:ifNotEnablePostBorders}p {/block:ifNotEnablePostBorders}all">
+                {block:IndexPage}
+                <div class="part left cap">
+                    <a href="{Permalink}">{NoteCountwithLabel}</a>
+                </div>
+                <div class="part right">
+                    <a class="like-btn" href="javascript:;">
+                        {LikeButton}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-meh initial"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="{color:liked like buttons}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile done"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </a>
+                    <a class="rb-btn" href="{ReblogURL}" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                    </a>
+                </div>
+                {/block:IndexPage}
+                {block:PermalinkPage}
+                {lang:Posted TimeAgo with NoteCount notes}<br/>
+                {block:RebloggedFrom}
+                {lang:Reblogged from ReblogParentName 2}, <span class="lo">{lang:Originally from ReblogRootName 2}</span><br/>
+                {/block:RebloggedFrom}
+                {block:HasTags}
+                {lang:Tagged with} {block:Tags}#<a href="{TagURL}">{Tag}</a>&nbsp; {/block:Tags}
+                {/block:HasTags}
+                {block:ContentSource}
+                <br/><br/>{lang:Source}: <a href="{SourceURL}">{SourceTitle}</a>
+                {/block:ContentSource}
+                {/block:PermalinkPage}
+            </div>
+            {/block:Date}
+        </article>
+        {block:PostNotes}
+        <article class="entry perma-notes-container">
+            <div class="entry-notes padded all{block:ifNotEnablePostBorders} p{/block:ifNotEnablePostBorders}">
+                <h1>{lang:Notes}</h1>
+                {PostNotes}
+            </div>
+        </article>
+        {/block:PostNotes}
+        {/block:Posts}
+        {block:Pagination}
+        <article class="pagination lo font">
+            <div class="previous">
+                {block:PreviousPage}
+                <a href="{PreviousPage}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> {lang:Prev}</a>
+                {/block:PreviousPage}
+            </div>
+            <div class="next">
+                {block:NextPage}
+                <a href="{NextPage}">{lang:Next} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                {/block:NextPage}
+            </div>
+        </article>
+        {/block:Pagination}
+    </section>
+	<div id="nt"><a href="https://spielglocken.tumblr.com" target="_blank"><img class="svg" src="https://static.tumblr.com/vr8wztv/QG5poaddv/spielglocken.svg"/><img class="text" src="https://static.tumblr.com/vr8wztv/fffpoankj/spielglocken1.svg" /></a><span class="cap"></span></div>
+</main>
+<div id="hours" style="visibility:hidden; position:absolute; width:1px; height:1px; top:-10px; left:-10px; font-size:1px;">{text:night mode hours}-{color:accent}-{color:dark mode accent}</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://static.tumblr.com/0podkko/jfMplm3f8/modified_photosets.js"></script>
+<script src="https://dl.dropbox.com/s/xm59mcz0h1gez6e/mykola-scripts.js"></script>
+</body>
+</html>
