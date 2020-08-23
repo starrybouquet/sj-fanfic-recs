@@ -4,15 +4,10 @@ from oauth2client.service_account import ServiceAccountCredentials
 import time
 
 
-def html_from_url(url):
-    '''uses requests to get html in str form (for BeautifulSoup) given a url'''
-    headers = {"User-Agent":"Mozilla/5.0"}
-    r = requests.get(url, headers=headers)
-    return r.text
-
 def split_by_commas(string):
     '''return list of items split by commas and stripped of whitespace'''
     return [s.strip() for s in string.split(", ")]
+
 
 def get_spreadsheets():
     # use creds to create a client to interact with the Google Drive API
@@ -42,6 +37,7 @@ def convert_legend_to_multiple_tags(filterlegend):
         newlegend.append([row[0], row[1], split_by_commas(row[2])])
     return newlegend
 
+
 def add_filters(rownum, recs, recs_local, converted_legend):
     '''add filters to recs sheet (NOT DATA ENTRY) based on categories/eps/seasons entered in doc (manually)'''
     fictags = []
@@ -53,6 +49,7 @@ def add_filters(rownum, recs, recs_local, converted_legend):
     recs.update('E{}'.format(rownum), filters_string)
 
     return filters_applicable
+
 
 def update_filter_legend(sheet_data):
     '''Short summary.

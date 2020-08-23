@@ -49,7 +49,7 @@ def post_fic(fic_data, id, client, state="published"):
 
 
 client = init_tumblr_client(blognum=1)
-# so apparently the issue is that it's a sideblog. eeeeee
+# i am an idiot who did not understand newlines. this works now.
 root = get_root_firebase()
 key, fic = find_fic_in_firebase('Thoughts', 'starrybouquet')
 print()
