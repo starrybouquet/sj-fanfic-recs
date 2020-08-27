@@ -44,7 +44,7 @@ def get_root_firebase():
     return root
 
 
-def get_recs_spreadsheet_only():
+def get_recs_spreadsheet_only(sheetnum=1):
     '''Get recs spreadsheets from Google
 
     Returns
@@ -62,7 +62,7 @@ def get_recs_spreadsheet_only():
     client = gspread.authorize(creds)
     print('credentials authorized.')
 
-    recs = client.open_by_url(sheet_url).get_worksheet(1)
+    recs = client.open_by_url(sheet_url).get_worksheet(sheetnum)
 
     recs_local = recs.get_all_values()
 
