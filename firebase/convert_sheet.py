@@ -87,19 +87,19 @@ def push_to_firebase(root, section_name, data_dict):
     return new_entry
 
 
-root = get_root_firebase()
-[recs, legend, recs_local, legend_local, converted_legend] = get_spreadsheets()
-counter = 0
-for row in legend_local:
-    filter_dict = create_filter_item(row)
-    push_to_firebase(root, 'filters', filter_dict)
-    counter += 1
-    print('Have added {} filter rows.'.format(counter))
-print()
-counter = 0
-for i in range(len(recs_local)):
-    fic_data = get_fic_dict(recs_local[i], legend_local, i+1)
-    push_to_firebase(root, 'fics', fic_data)
-    counter += 1
-    print('Have added {} fics.'.format(counter))
-print()
+# root = get_root_firebase()
+# [recs, legend, recs_local, legend_local, converted_legend] = get_spreadsheets()
+# counter = 0
+# for row in legend_local:
+#     filter_dict = create_filter_item(row)
+#     push_to_firebase(root, 'filters', filter_dict)
+#     counter += 1
+#     print('Have added {} filter rows.'.format(counter))
+# print()
+# counter = 0
+# for i in range(len(recs_local)):
+#     fic_data = get_fic_dict(recs_local[i], legend_local, i+1)
+#     push_to_firebase(root, 'fics', fic_data)
+#     counter += 1
+#     print('Have added {} fics.'.format(counter))
+# print()
