@@ -1,0 +1,323 @@
+<!-----
+
+;; tags one ;;
+
+navigation page by ebrothemes (originally posted by me on my main, @longtud-de-onda)
+
+TERMS OF USE:
+- do not remove the credit.
+- do not repost/redistribute.
+- do not take parts of the code and use it as your own.
+- do not use as a base code.
+
+COLORS:
+if you want to change the colors mess with the colors in the ::root section, there are further instructions there, including the code for the dark version.
+
+INSTRUCTIONS:
+if you like exactly how it looks and just want to fill it in with your links and such, scroll all the way down to where it says 'start editing content' here. if you want to mess with other parts of the code, there are some instructions littered in the css
+
+x camila
+
+----->
+
+
+<!DOCTYPE html>
+<html>
+<html lang="en-US">
+<head>
+
+<title>navigation</title> <!--- edit what the page name looks like on the tab -->
+
+<link rel="shortcut icon" href="{Favicon}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Nunito:400,400i,700,700i&display=swap" rel="stylesheet">
+
+<style type="text/css">
+
+/*
+to change color scheme, edit colors here
+it works best if you only change the accent colors
+and don't mess around too much with the others
+unless you know what you're doing*/
+
+:root {
+  --background: #efefef;
+  --white: #fff;
+  --text: #181923;
+  --blueaccent: #1b929f;
+  --pinkaccent: #db93b0;
+  --yellowaccent: #ffc857;
+  --cardglow: #d6d6d6;
+}
+
+/*comment out previous colors and uncomment this root for dark scheme*/
+
+/*--- Dark Scheme*/
+/*:root {
+  --background: #181923;
+  --white: #000;
+  --text: #d1d1d1;
+  --blueaccent: #537A5A;
+  --pinkaccent: #582630;
+  --yellowaccent: #C17019;
+  --cardglow: #111111
+}  */
+
+body > iframe:first-child { display: none !important; }
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    border: 5px solid var(--white);
+    background-color: var(--background);
+
+}
+
+::-webkit-scrollbar-thumb {
+   border: 2px solid var(--white);
+   border-radius: 7px;
+   background-color: var(--yellowaccent);
+   /* change scrollbar color here */
+}
+
+
+body {
+    background: var(--background);
+}
+
+a {
+    color: var(--text);
+    text-decoration: none
+
+}
+
+a:hover {
+    color: var(--text);
+}
+
+.sidenav {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color:var(--white);
+    overflow: hidden;
+    padding-top: 30px;
+}
+
+.avatar {
+    height: 100px;
+    width: 100px;
+    margin: auto;
+    margin-bottom: 30px;
+    border-radius: 10px;
+}
+
+.vl {
+    width: calc(50% - 1px);
+    border-right: solid 2px var(--yellowaccent);
+    /* change vertical line color here*/
+    margin-bottom: 10px;
+}
+
+.navlink {
+    width: max-content;
+    margin: auto;
+    padding-left: 2px;
+    padding-right: 2px;
+    text-align: center;
+    text-transform: lowercase;
+    margin-bottom: 10px;
+    color: var(--text);
+    font: 15px "Nunito", sans-serif;
+    text-decoration: none;
+    background-position-y: -0%;
+    background-image: linear-gradient(var(--white) 50%, var(--pinkaccent) 50%);
+    /* change what color the sidebar link highlights are by changing the word 'pinkaccent' to either another color name from the root menu or by completely removing var() and replacing with an html code*/
+    transition: background 500ms ease;
+    background-size: auto 200%;
+}
+
+.navlink:hover {
+  background-position-y: 100%;
+}
+
+.main {
+    margin-left: 160px;
+    padding: 30px;
+}
+
+.content {
+    height: 500px;
+    width: 840px;
+    margin: auto;
+}
+
+.card {
+    height: 190px;
+    width: 250px;
+    margin: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 0 var(--cardglow);
+    float: left;
+    overflow: hidden;
+}
+
+.upper {
+    height: 140px;
+    width: 250px;
+    position: relative;
+}
+
+.info {
+    height: 90px;
+    width: 200px;
+    background-color: var(--white);
+    position: absolute;
+    margin: 15px;
+    border-radius: 5px;
+    border: 10px var(--white) solid;
+    opacity:0;
+    transition-duration: 800ms;
+    overflow: auto;
+}
+
+.card:hover .info {opacity:1;}
+
+.ilink {
+    height: max-content;
+    padding: 3px 8px;
+    width: max-content;
+    max-width: 150px;
+    border-radius: 5px;
+    color: var(--text);
+    font: 15px "Nunito", sans-serif;
+    transition: 300ms;
+
+}
+
+.ilink:nth-child(3n+3) {
+  background-color: var(--pinkaccent);
+}
+
+.ilink:nth-child(3n+1) {
+  background-color: var(--blueaccent);
+}
+
+.ilink:nth-child(3n+2) {
+  background-color: var(--yellowaccent);
+}
+
+.ilink ~ .ilink { margin-top: 5px;}
+
+.lower {
+    height: 20px;
+    width: 220px;
+    background-color: var(--white);
+    padding: 15px;
+    text-align: center;
+    color: var(--text);
+    font: bold 15px "Nunito", sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.ilink::-webkit-scrollbar-track {
+    border: 5px solid var(--white);
+    background-color: var(--background);
+
+}
+
+.ilink::-webkit-scrollbar-thumb {
+   border: 2px solid var(--white);
+   border-radius: 7px;
+   background-color: var(--blueaccent);
+}
+
+</style>
+</head>
+
+
+
+<!-- START EDITING CONTENT HERE -->
+
+
+<body>
+<div class="sidenav">
+
+<!-- this is the sidebar code, remember to put an image where it says 'avatar url here.' you can add as many links as fit on the page, just copy and paste the line with the link-->
+
+    <div class="avatar" style="background-image:url('AVATAR URL HERE'); background-size: 100px auto;"></div>
+    <div class="vl" style="height:40px;"></div>
+    <div class="navlink"><a href="/">home</a></div>
+    <div class="navlink"><a href="/ask">ask</a></div>
+    <div class="navlink"><a href="URL HERE">link one</a></div>
+    <div class="navlink"><a href="URL HERE">link two</a></div>
+    <div class="vl" style="height:120px"></div>
+
+
+</div>
+<div class="main">
+<div class="content">
+
+<!--- copy and paste card code for as many categories as you need, they will line up in rows of 3, and scroll once there's more than nine --->
+
+        <!--- ONE 'CARD' STARTS HERE --->
+        <div class="card">
+        <div class="upper" style="background-image:url('BACKGROUND HERE'); background-size: 250px auto;">
+        <div class="info">
+            <div class="ilink"><a href="URL">tag 1</a></div>
+            <div class="ilink"><a href="URL">tag 2</a></div>
+            <div class="ilink"><a href="URL">tag 3</a></div>
+            <div class="ilink"><a href="URL">tag 4</a></div>
+            <div class="ilink"><a href="URL">tag 5</a></div>
+        </div></div><div class="lower">Category</div></div>
+        <!--- ENDS HERE --->
+
+        <!--- ONE 'CARD' STARTS HERE --->
+        <div class="card">
+        <div class="upper" style="background-image:url('BACKGROUND HERE'); background-size: 250px auto;">
+        <div class="info">
+            <div class="ilink"><a href="URL">tag 1</a></div>
+            <div class="ilink"><a href="URL">tag 2</a></div>
+            <div class="ilink"><a href="URL">tag 3</a></div>
+            <div class="ilink"><a href="URL">tag 4</a></div>
+            <div class="ilink"><a href="URL">tag 5</a></div>
+        </div></div><div class="lower">Category</div></div>
+        <!--- ENDS HERE --->
+
+        <!--- ONE 'CARD' STARTS HERE --->
+        <div class="card">
+        <div class="upper" style="background-image:url('BACKGROUND HERE'); background-size: 250px auto;">
+        <div class="info">
+            <div class="ilink"><a href="URL">tag 1</a></div>
+            <div class="ilink"><a href="URL">tag 2</a></div>
+            <div class="ilink"><a href="URL">tag 3</a></div>
+            <div class="ilink"><a href="URL">tag 4</a></div>
+            <div class="ilink"><a href="URL">tag 5</a></div>
+        </div></div><div class="lower">Category</div></div>
+        <!--- ENDS HERE --->
+
+        <!--- ONE 'CARD' STARTS HERE --->
+        <div class="card">
+        <div class="upper" style="background-image:url('BACKGROUND HERE'); background-size: 250px auto;">
+        <div class="info">
+            <div class="ilink"><a href="URL">tag 1</a></div>
+            <div class="ilink"><a href="URL">tag 2</a></div>
+            <div class="ilink"><a href="URL">tag 3</a></div>
+            <div class="ilink"><a href="URL">tag 4</a></div>
+            <div class="ilink"><a href="URL">tag 5</a></div>
+        </div></div><div class="lower">Category</div></div>
+        <!--- ENDS HERE --->
+
+
+    </div>
+
+</div>
+<div style="font-family:'Nunito', sans-serif;position:fixed;bottom:15px;right:10px;font-size:14.5px;line-height:14px;height:14px;width:14px;padding:4px;"><a href="https://ebrothemes.tumblr.com" title="ebrothemes" style="color:#727F78;">E</a></div>
+</body>
+</html>

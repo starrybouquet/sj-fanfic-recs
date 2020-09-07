@@ -9,6 +9,7 @@ from datetime import date
 episodeList = pd.read_csv('sg1-eps.csv', sep=',', header=None)
 print(episodeList.head())
 
+
 def get_filters():
     # use creds to create a client to interact with the Google Drive API
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
